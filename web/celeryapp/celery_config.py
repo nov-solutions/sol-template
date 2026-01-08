@@ -1,5 +1,6 @@
 import os
 
+from celery.schedules import crontab
 from kombu import Exchange
 
 REDIS_PASSWORD = os.environ.get("REDIS_PASSWORD")
@@ -23,3 +24,11 @@ redbeat_redis_url = f"redis://:{REDIS_PASSWORD}@{REDIS_HOST}:6379/1"
 default_exchange = Exchange("default", type="topic")
 
 task_queues = ()
+
+# Celery Beat schedule
+beat_schedule = {
+    "cleanup-unverified-accounts": {
+        "task": "authapi.tasks.cleanup_unverified_accounts",
+        "schedule": crontab(hour=3, minute=0),  # Run daily at 3 AM
+    },
+}

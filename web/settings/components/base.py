@@ -34,16 +34,24 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.staticfiles",
     "django.contrib.messages",
+    "django.contrib.sites",
     "corsheaders",
     # drf
     "rest_framework",
     "django_extensions",
     "django_filters",
     "drf_spectacular",
+    # allauth
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.google",
     # core logic
     "core.apps.CoreConfig",
     # users and auth
     "user.apps.UserConfig",
+    # auth api
+    "authapi.apps.AuthapiConfig",
     # automated api docs
     "spectacular.apps.SpectacularSwaggerConfig",
     # async task queueing
@@ -67,6 +75,8 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "corsheaders.middleware.CorsMiddleware",
+    # allauth middleware
+    "allauth.account.middleware.AccountMiddleware",
     # django_prometheus middleware
     "django_prometheus.middleware.PrometheusAfterMiddleware",
 ]
@@ -85,6 +95,14 @@ DATABASES = {
 USE_TZ = True
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Required for django-allauth
+SITE_ID = 1
+
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+]
 
 AUTH_PASSWORD_VALIDATORS = [
     {

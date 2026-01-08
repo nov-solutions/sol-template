@@ -1,26 +1,31 @@
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
 import Link from "next/link";
 
 export default function FinalCTA() {
   return (
-    <div className="px-4 py-24 bg-background lg:px-0">
-      <div className="grid items-center gap-8 p-8 mx-auto lg:grid-cols-2 lg:w-2/3">
-        <div className="flex flex-col items-center space-y-4 text-center lg:items-start lg:text-left">
-          <h2 className="text-foreground">TODO</h2>
-          <p className="text-muted-foreground">TODO</p>
-          <Button asChild>
-            <Link href="TODO">TODO</Link>
+    <section className="py-24 px-6 bg-primary text-primary-foreground">
+      <div className="max-w-3xl mx-auto text-center space-y-8">
+        <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+          Ready to ship faster?
+        </h2>
+        <p className="text-lg opacity-90">
+          Join developers who have stopped rebuilding the same infrastructure
+          and started focusing on what makes their product unique.
+        </p>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <Button
+            size="lg"
+            variant="secondary"
+            className="text-base px-8"
+            asChild
+          >
+            <Link href="/register">Get Started Free</Link>
           </Button>
         </div>
-        <Image
-          src="/assets/img/logos/wordmark.png"
-          alt="TODO"
-          className="mx-auto rounded-lg"
-          width={550}
-          height={550}
-        />
+        <p className="text-sm opacity-75">
+          Free forever for side projects. No credit card required.
+        </p>
       </div>
-    </div>
+    </section>
   );
 }

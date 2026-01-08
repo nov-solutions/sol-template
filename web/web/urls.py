@@ -18,6 +18,7 @@ urlpatterns = [
     path("api/healthcheck/", views.healthcheck),
     path("api/metrics/", include("metrics.urls")),
     path("api/stripe/", include("stripe.urls")),
+    path("api/auth/", include("authapi.urls")),
 ]
 
 if config("ENVIRONMENT") == "prod" and not config(

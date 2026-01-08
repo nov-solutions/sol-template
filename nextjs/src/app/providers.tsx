@@ -1,3 +1,4 @@
+import { AuthProvider } from "@/contexts/auth-context";
 import ProgressBarProvider from "@/providers/progressBarProvider";
 import { ThemeProvider } from "@/providers/theme-provider";
 
@@ -10,7 +11,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         enableSystem
         disableTransitionOnChange
       >
-        {children}
+        <AuthProvider>{children}</AuthProvider>
       </ThemeProvider>
     </ProgressBarProvider>
   );

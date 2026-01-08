@@ -1,5 +1,6 @@
 import sys
 
+import settings.components.allauth  # noqa
 import settings.components.base  # noqa
 import settings.components.logging_settings  # noqa
 import settings.components.mail  # noqa
