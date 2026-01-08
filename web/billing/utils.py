@@ -3,15 +3,12 @@ from datetime import datetime, timezone
 import stripe
 import structlog
 from django.conf import settings
-from django.contrib.auth import get_user_model
 
 from .models import StripeCustomer, Subscription
 
 logger = structlog.get_logger(__name__)
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
-
-User = get_user_model()
 
 
 def get_or_create_stripe_customer(user):
@@ -161,39 +158,3 @@ def check_subscription_access(user, required_status=None):
         return subscription and subscription.status in required_status
     except (AttributeError, StripeCustomer.DoesNotExist):
         return False
-
-
-def get_subscription_prices():
-    """
-    Get subscription prices from settings or Stripe
-    Returns a list of price objects with their details
-    """
-    # If prices are configured in settings, use those
-    if hasattr(settings, "STRIPE_PRICES"):
-        return settings.STRIPE_PRICES
-
-    # Otherwise, fetch from Stripe API (cached)
-    try:
-        prices = stripe.Price.list(active=True, type="recurring", limit=100)
-
-        price_list = []
-        for price in prices.data:
-            price_list.append(
-                {
-                    "id": price.id,
-                    "unit_amount": price.unit_amount,
-                    "currency": price.currency,
-                    "interval": price.recurring.interval,
-                    "interval_count": price.recurring.interval_count,
-                    "product_name": (
-                        price.product.name
-                        if hasattr(price.product, "name")
-                        else price.product
-                    ),
-                }
-            )
-
-        return price_list
-    except stripe.error.StripeError as e:
-        logger.error(f"Error fetching prices from Stripe: {str(e)}")
-        return []
