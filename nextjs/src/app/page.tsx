@@ -1,6 +1,11 @@
+import FeatureHighlight from "@/components/marketing/feature-highlight";
+import FinalCTA from "@/components/marketing/finalcta";
 import Footer from "@/components/marketing/footer";
-import FullHeightSplash from "@/components/marketing/fullheightsplash";
+import Hero from "@/components/marketing/hero";
 import Nav from "@/components/marketing/nav";
+import ProblemSolution from "@/components/marketing/problem-solution";
+import SocialProof from "@/components/marketing/social-proof";
+import Testimonials from "@/components/marketing/testimonials";
 import {
   SITE_BASE_DOMAIN,
   SITE_DESCRIPTION,
@@ -51,7 +56,14 @@ export default function Home() {
         }}
       />
       <Nav />
-      <FullHeightSplash />
+      <main>
+        <Hero />
+        <SocialProof />
+        <ProblemSolution />
+        <FeatureHighlight />
+        <Testimonials />
+        <FinalCTA />
+      </main>
       <Footer />
     </>
   );
