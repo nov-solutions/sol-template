@@ -1,6 +1,17 @@
 "use client";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -49,13 +60,6 @@ export default function BillingPage() {
   };
 
   const handleCancel = async () => {
-    if (
-      !confirm(
-        "Are you sure you want to cancel? You'll keep access until the end of your billing period.",
-      )
-    ) {
-      return;
-    }
     try {
       setActionLoading("cancel");
       setError(null);
@@ -199,18 +203,46 @@ export default function BillingPage() {
                       "Manage Billing"
                     )}
                   </Button>
-                  <Button
-                    variant="ghost"
-                    className="text-destructive hover:text-destructive"
-                    onClick={handleCancel}
-                    disabled={actionLoading !== null}
-                  >
-                    {actionLoading === "cancel" ? (
-                      <RiLoader4Line className="h-4 w-4 animate-spin" />
-                    ) : (
-                      "Cancel Subscription"
-                    )}
-                  </Button>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        className="text-destructive hover:text-destructive"
+                        disabled={actionLoading !== null}
+                      >
+                        {actionLoading === "cancel" ? (
+                          <RiLoader4Line className="h-4 w-4 animate-spin" />
+                        ) : (
+                          "Cancel Subscription"
+                        )}
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          Cancel subscription?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          You&apos;ll keep access until the end of your current
+                          billing period (
+                          {subscription?.current_period_end &&
+                            new Date(
+                              subscription.current_period_end,
+                            ).toLocaleDateString()}
+                          ). You can reactivate anytime before then.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Keep subscription</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={handleCancel}
+                          className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                        >
+                          Cancel subscription
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </div>
               )}
             </div>

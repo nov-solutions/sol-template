@@ -59,7 +59,7 @@ INSTALLED_APPS = [
     # e-mail
     "mail.apps.MailConfig",
     # stripe payments
-    "stripe.apps.StripeConfig",
+    "billing.apps.BillingConfig",
     # metrics and monitoring
     "metrics.apps.MetricsConfig",
 ]

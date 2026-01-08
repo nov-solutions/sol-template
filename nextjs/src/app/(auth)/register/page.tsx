@@ -8,15 +8,21 @@ import { Separator } from "@/components/ui/separator";
 import { AuthCard } from "@/components/auth/auth-card";
 import { GoogleButton } from "@/components/auth/google-button";
 import { useAuth } from "@/hooks/use-auth";
+import { axiosClient } from "@/lib/axiosClient";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 export default function RegisterPage() {
-  const { register, loading, error, clearError } = useAuth();
+  const { loading, error, clearError, refreshUser } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [localError, setLocalError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const plan = searchParams.get("plan");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,9 +40,36 @@ export default function RegisterPage() {
     }
 
     try {
-      await register(email, password, passwordConfirm);
-    } catch {
-      // Error is handled by the auth context
+      setIsSubmitting(true);
+      await axiosClient.post("/auth/register/", {
+        email,
+        password,
+        password_confirm: passwordConfirm,
+      });
+      await refreshUser();
+
+      // If user came from pricing page with a plan, redirect back to complete checkout
+      if (plan) {
+        router.push(`/pricing?plan=${plan}`);
+      } else {
+        router.push("/dashboard");
+      }
+    } catch (err: unknown) {
+      const errorData = (
+        err as {
+          response?: {
+            data?: { error?: string; email?: string[]; password?: string[] };
+          };
+        }
+      )?.response?.data;
+      const errorMessage =
+        errorData?.error ||
+        errorData?.email?.[0] ||
+        errorData?.password?.[0] ||
+        "Registration failed. Please try again.";
+      setLocalError(errorMessage);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -100,8 +133,8 @@ export default function RegisterPage() {
           />
         </div>
 
-        <Button type="submit" className="w-full" disabled={loading}>
-          {loading ? "Creating account..." : "Create account"}
+        <Button type="submit" className="w-full" disabled={isSubmitting}>
+          {isSubmitting ? "Creating account..." : "Create account"}
         </Button>
 
         <div className="relative">

@@ -9,7 +9,7 @@ from .views import (
     subscription_status,
 )
 
-app_name = "stripe"
+app_name = "billing"
 
 urlpatterns = [
     # Subscription management
