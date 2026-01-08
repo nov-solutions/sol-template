@@ -1,3 +1,4 @@
+import { Card, CardContent } from "@/components/ui/card";
 import { RiDoubleQuotesL } from "@remixicon/react";
 
 interface Testimonial {
@@ -47,29 +48,28 @@ export default function Testimonials() {
 
         <div className="grid md:grid-cols-3 gap-8">
           {testimonials.map((testimonial, i) => (
-            <div
-              key={i}
-              className="flex flex-col p-6 rounded-lg border bg-background"
-            >
-              <RiDoubleQuotesL className="h-8 w-8 text-primary/20 mb-4" />
-              <p className="flex-1 text-muted-foreground mb-6">
-                &ldquo;{testimonial.quote}&rdquo;
-              </p>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-sm font-medium">
-                  {testimonial.author
-                    .split(" ")
-                    .map((n) => n[0])
-                    .join("")}
+            <Card key={i} className="flex flex-col">
+              <CardContent className="flex flex-col flex-1 pt-6">
+                <RiDoubleQuotesL className="h-8 w-8 text-primary/20 mb-4" />
+                <p className="flex-1 text-muted-foreground mb-6">
+                  &ldquo;{testimonial.quote}&rdquo;
+                </p>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-sm font-medium">
+                    {testimonial.author
+                      .split(" ")
+                      .map((n) => n[0])
+                      .join("")}
+                  </div>
+                  <div>
+                    <p className="font-medium text-sm">{testimonial.author}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {testimonial.role}, {testimonial.company}
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <p className="font-medium text-sm">{testimonial.author}</p>
-                  <p className="text-xs text-muted-foreground">
-                    {testimonial.role}, {testimonial.company}
-                  </p>
-                </div>
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           ))}
         </div>
       </div>

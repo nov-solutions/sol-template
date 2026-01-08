@@ -1,3 +1,4 @@
+import { Card, CardContent } from "@/components/ui/card";
 import {
   RiShieldCheckLine,
   RiMailLine,
@@ -51,22 +52,21 @@ export default function FeatureHighlight() {
 
         <div className="grid sm:grid-cols-2 gap-8">
           {features.map((feature, i) => (
-            <div
-              key={i}
-              className="flex gap-4 p-6 rounded-lg bg-background border"
-            >
-              <div className="shrink-0">
-                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                  <feature.icon className="h-5 w-5 text-primary" />
+            <Card key={i} className="flex-row gap-4">
+              <CardContent className="flex gap-4 pt-6">
+                <div className="shrink-0">
+                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <feature.icon className="h-5 w-5 text-primary" />
+                  </div>
                 </div>
-              </div>
-              <div>
-                <h3 className="font-semibold mb-1">{feature.title}</h3>
-                <p className="text-sm text-muted-foreground">
-                  {feature.description}
-                </p>
-              </div>
-            </div>
+                <div>
+                  <h3 className="font-semibold mb-1">{feature.title}</h3>
+                  <p className="text-sm text-muted-foreground">
+                    {feature.description}
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
           ))}
         </div>
       </div>
