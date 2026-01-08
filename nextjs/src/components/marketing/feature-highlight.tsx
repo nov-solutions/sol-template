@@ -35,7 +35,7 @@ export default function FeatureHighlight() {
   ];
 
   return (
-    <section className="py-24 px-6 bg-muted/30">
+    <section id="features" className="py-24 px-6 bg-muted/30">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-16">
           <p className="text-sm font-medium text-primary mb-2">
