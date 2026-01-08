@@ -9,6 +9,8 @@ from rest_framework.views import APIView
 
 from .models import EmailVerificationToken, PasswordResetToken
 from .serializers import (
+    ChangePasswordSerializer,
+    DeleteAccountSerializer,
     ForgotPasswordSerializer,
     LoginSerializer,
     RegisterSerializer,
@@ -89,6 +91,55 @@ class CurrentUserView(APIView):
 
     def get(self, request):
         return Response(UserSerializer(request.user).data)
+
+
+class ChangePasswordView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        serializer = ChangePasswordSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        user = request.user
+
+        # Verify current password
+        if not user.check_password(serializer.validated_data["current_password"]):
+            return Response(
+                {"error": "Current password is incorrect."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # Set new password
+        user.set_password(serializer.validated_data["new_password"])
+        user.save()
+
+        # Re-login to update session
+        login(request, user, backend="django.contrib.auth.backends.ModelBackend")
+
+        return Response({"message": "Password changed successfully."})
+
+
+class DeleteAccountView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        serializer = DeleteAccountSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        user = request.user
+
+        # Verify password
+        if not user.check_password(serializer.validated_data["password"]):
+            return Response(
+                {"error": "Password is incorrect."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # Logout and delete
+        logout(request)
+        user.delete()
+
+        return Response({"message": "Account deleted successfully."})
 
 
 class ForgotPasswordView(APIView):

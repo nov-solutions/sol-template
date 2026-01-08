@@ -1,7 +1,21 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { useAuth } from "@/hooks/use-auth";
+import {
+  RiCheckLine,
+  RiErrorWarningLine,
+  RiSettings4Line,
+  RiBankCardLine,
+} from "@remixicon/react";
+import Link from "next/link";
 
 export default function DashboardPage() {
   const { user } = useAuth();
@@ -9,110 +23,77 @@ export default function DashboardPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold">Welcome back!</h1>
-        <p className="text-muted-foreground">
-          Here&apos;s an overview of your account.
-        </p>
+        <h1 className="text-2xl font-bold">Dashboard</h1>
+        <p className="text-muted-foreground">Welcome back, {user?.email}</p>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-2">
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Email</CardTitle>
-            <svg
-              className="h-4 w-4 text-muted-foreground"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-              />
-            </svg>
+          <CardHeader>
+            <CardTitle className="text-base">Account Status</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-lg font-medium">{user?.email}</div>
-            <p className="text-xs text-muted-foreground">
-              {user?.email_verified ? (
-                <span className="text-green-600">Verified</span>
-              ) : (
-                <span className="text-yellow-600">Not verified</span>
-              )}
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Account Status
-            </CardTitle>
-            <svg
-              className="h-4 w-4 text-muted-foreground"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-          </CardHeader>
-          <CardContent>
-            <div className="text-lg font-medium text-green-600">Active</div>
-            <p className="text-xs text-muted-foreground">
-              Member since{" "}
-              {user?.created_at
-                ? new Date(user.created_at).toLocaleDateString()
-                : "N/A"}
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Quick Actions</CardTitle>
-            <svg
-              className="h-4 w-4 text-muted-foreground"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M13 10V3L4 14h7v7l9-11h-7z"
-              />
-            </svg>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              <a
-                href="/dashboard/settings"
-                className="block text-sm text-primary hover:underline"
-              >
-                Account settings
-              </a>
+          <CardContent className="space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-muted-foreground">Email</span>
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-medium">{user?.email}</span>
+                {user?.email_verified ? (
+                  <RiCheckLine className="h-4 w-4 text-green-600" />
+                ) : (
+                  <RiErrorWarningLine className="h-4 w-4 text-yellow-600" />
+                )}
+              </div>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-muted-foreground">
+                Member since
+              </span>
+              <span className="text-sm font-medium">
+                {user?.created_at
+                  ? new Date(user.created_at).toLocaleDateString()
+                  : "N/A"}
+              </span>
             </div>
           </CardContent>
         </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Quick Actions</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            <Button variant="outline" className="w-full justify-start" asChild>
+              <Link href="/dashboard/settings">
+                <RiSettings4Line className="h-4 w-4 mr-2" />
+                Account Settings
+              </Link>
+            </Button>
+            <Button variant="outline" className="w-full justify-start" asChild>
+              <Link href="/dashboard/billing">
+                <RiBankCardLine className="h-4 w-4 mr-2" />
+                Manage Billing
+              </Link>
+            </Button>
+          </CardContent>
+        </Card>
       </div>
 
-      <Card>
+      <Card className="border-dashed">
         <CardHeader>
-          <CardTitle>Getting Started</CardTitle>
+          <CardTitle>Build Your Dashboard</CardTitle>
+          <CardDescription>
+            This is your application&apos;s main dashboard. Replace this card
+            with your app&apos;s core functionality.
+          </CardDescription>
         </CardHeader>
         <CardContent>
-          <p className="text-muted-foreground">
-            This is a placeholder dashboard. Customize this page to display
-            relevant information and actions for your application.
+          <p className="text-sm text-muted-foreground">
+            Common dashboard elements include: activity feeds, analytics charts,
+            recent items, quick actions, or status overviews. Customize this
+            page in{" "}
+            <code className="text-xs bg-muted px-1 py-0.5 rounded">
+              src/app/(dashboard)/dashboard/page.tsx
+            </code>
           </p>
         </CardContent>
       </Card>
