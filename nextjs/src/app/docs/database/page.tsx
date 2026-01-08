@@ -94,8 +94,8 @@ class Subscription(models.Model):
 make mk-mig
 
 # Or manually inside the container
-docker exec -it newsolwebapp-web-django python manage.py makemigrations
-docker exec -it newsolwebapp-web-django python manage.py migrate`}</code>
+docker exec -it sol-web-django python manage.py makemigrations
+docker exec -it sol-web-django python manage.py migrate`}</code>
       </pre>
 
       <h2>Creating New Models</h2>
@@ -147,7 +147,7 @@ class Project(models.Model):
 
       <pre>
         <code>{`# Via Docker
-docker exec -it newsolwebapp-db-postgres psql -U postgres -d sol
+docker exec -it sol-web-db-postgres psql -U postgres -d sol
 
 # Common commands
 \\dt           # List tables

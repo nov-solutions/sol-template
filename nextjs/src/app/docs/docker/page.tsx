@@ -117,17 +117,17 @@ make drop-db`}</code>
       <h2>Accessing Containers</h2>
       <pre>
         <code>{`# Shell into Django container
-docker exec -it newsolwebapp-web-django bash
+docker exec -it sol-web-django bash
 
 # Django management commands
-docker exec -it newsolwebapp-web-django python manage.py shell
-docker exec -it newsolwebapp-web-django python manage.py createsuperuser
+docker exec -it sol-web-django python manage.py shell
+docker exec -it sol-web-django python manage.py createsuperuser
 
 # Access PostgreSQL
-docker exec -it newsolwebapp-db-postgres psql -U postgres -d sol
+docker exec -it sol-web-db-postgres psql -U postgres -d sol
 
 # Access Redis CLI
-docker exec -it newsolwebapp-cache-redis redis-cli`}</code>
+docker exec -it sol-web-redis redis-cli`}</code>
       </pre>
 
       <h2>Docker Compose Configuration</h2>

@@ -3,7 +3,6 @@ from functools import wraps
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import redirect
-from django.urls import reverse
 
 from .utils import check_subscription_access
 
@@ -42,7 +41,7 @@ def subscription_required(view_func=None, redirect_url=None, required_status=Non
                     )
                 else:
                     # Redirect for regular requests
-                    url = redirect_url or reverse("stripe:checkout")
+                    url = redirect_url or "/pricing/"
                     return redirect(url)
             return view(request, *args, **kwargs)
 

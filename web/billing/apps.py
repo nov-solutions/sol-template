@@ -1,7 +1,7 @@
 from django.apps import AppConfig
 
 
-class StripeConfig(AppConfig):
+class BillingConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
-    name = "stripe"
-    verbose_name = "Stripe"
+    name = "billing"
+    verbose_name = "Billing"

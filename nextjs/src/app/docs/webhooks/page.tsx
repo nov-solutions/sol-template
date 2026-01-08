@@ -215,7 +215,7 @@ stripe trigger checkout.session.completed`}</code>
 
       <pre>
         <code>{`# View Django logs for webhook processing
-docker logs -f newsolwebapp-web-django | grep webhook`}</code>
+docker logs -f sol-web-django | grep webhook`}</code>
       </pre>
 
       <h2>Best Practices</h2>

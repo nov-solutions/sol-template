@@ -67,7 +67,7 @@ class SubscriptionAdmin(admin.ModelAdmin):
     status_colored.admin_order_field = "status"
 
     def get_readonly_fields(self, request, obj=None):
-        # Make stripe_subscription_id readonly after creation
+        # Make customer readonly after creation
         if obj:
-            return self.readonly_fields + ["stripe_subscription_id", "customer"]
+            return self.readonly_fields + ["customer"]
         return self.readonly_fields
