@@ -1,3 +1,4 @@
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -6,10 +7,10 @@ export default function Hero() {
     <section className="flex flex-col items-center justify-center min-h-[90vh] px-6 pt-24 pb-16">
       <div className="max-w-4xl mx-auto text-center space-y-8">
         {/* Optional: Small badge/pill above headline */}
-        <div className="inline-flex items-center rounded-full border px-4 py-1.5 text-sm text-muted-foreground">
+        <Badge variant="outline" className="rounded-full px-4 py-1.5 text-sm">
           <span className="mr-2">🚀</span>
-          <span>Now in public beta</span>
-        </div>
+          Now in public beta
+        </Badge>
 
         {/* Main headline - benefit-focused, not product-focused */}
         <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
