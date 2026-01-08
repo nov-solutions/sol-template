@@ -135,10 +135,10 @@ from myapp.tasks import (  # noqa: F401
 
       <pre>
         <code>{`# View worker logs
-docker logs -f newsolwebapp-worker
+docker logs -f sol-web-worker
 
 # View scheduled tasks
-docker logs -f newsolwebapp-scheduler`}</code>
+docker logs -f sol-web-scheduler`}</code>
       </pre>
 
       <h2>Task Results</h2>

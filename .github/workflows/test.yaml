@@ -54,14 +54,14 @@ jobs:
         run: |
           set -e
 
-          docker logs -f newsolwebapp-web-django &
+          docker logs -f sol-web-django &
           LOG_PID=$!
 
           trap "echo 'Stop'; kill $LOG_PID" EXIT
 
           end=$((SECONDS+300))
           while [ $SECONDS -lt $end ]; do
-            STATUS="$(docker inspect --format='{{.State.Health.Status}}' newsolwebapp-web-django || echo 'none')"
+            STATUS="$(docker inspect --format='{{.State.Health.Status}}' sol-web-django || echo 'none')"
             if [ "$STATUS" = "healthy" ]; then
               echo "Django container is healthy!"
               echo "-------------------------------------------------"
@@ -86,21 +86,21 @@ jobs:
 
       - name: Run Django tests
         run: |
-          docker exec newsolwebapp-web-django python manage.py test
+          docker exec sol-web-django python manage.py test
 
       - name: Wait for Next.js container to be healthy
         timeout-minutes: 2
         run: |
           set -e
 
-          docker logs -f newsolwebapp-web-nextjs &
+          docker logs -f sol-web-nextjs &
           LOG_PID=$!
 
           trap "echo 'Stop'; kill $LOG_PID" EXIT
 
           end=$((SECONDS+300))
           while [ $SECONDS -lt $end ]; do
-            STATUS="$(docker inspect --format='{{.State.Health.Status}}' newsolwebapp-web-nextjs || echo 'none')"
+            STATUS="$(docker inspect --format='{{.State.Health.Status}}' sol-web-nextjs || echo 'none')"
             if [ "$STATUS" = "healthy" ]; then
               echo "Next.js container is healthy!"
               echo "-------------------------------------------------"

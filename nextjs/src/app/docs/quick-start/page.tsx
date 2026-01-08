@@ -72,7 +72,7 @@ cd sol-web`}</code>
 
       <h2>5. Create an Admin User</h2>
       <pre>
-        <code>{`docker exec -it newsolwebapp-web-django python manage.py createsuperuser`}</code>
+        <code>{`docker exec -it sol-web-django python manage.py createsuperuser`}</code>
       </pre>
 
       <h2>Common Commands</h2>

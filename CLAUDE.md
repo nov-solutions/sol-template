@@ -106,7 +106,7 @@ Django tests:
 
 ```bash
 make test
-# Or directly: docker exec -it newsolwebapp-web-django python manage.py test
+# Or directly: docker exec -it sol-web-django python manage.py test
 ```
 
 ## Development Notes

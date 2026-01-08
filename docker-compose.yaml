@@ -3,7 +3,7 @@ volumes:
 
 services:
   nextjs:
-    container_name: newsolwebapp-web-nextjs
+    container_name: sol-web-nextjs
     restart: unless-stopped
     build:
       context: ./nextjs
@@ -15,6 +15,7 @@ services:
       ENVIRONMENT: dev
       NEXT_PUBLIC_SITE_NAME: sol
       NEXT_PUBLIC_SITE_BASE_DOMAIN: http://localhost
+      NEXT_PUBLIC_STRIPE_PRO_PRICE_ID: price_1SnQASRQeoF5PAdPWOezq4tj
     depends_on:
       django:
         condition: service_healthy
@@ -30,13 +31,13 @@ services:
       start_period: 30s
 
   django:
-    container_name: newsolwebapp-web-django
+    container_name: sol-web-django
     restart: unless-stopped
     build:
       context: ./web
       dockerfile: Dockerfile.django
       target: dev
-    image: newsolwebapp-django:dev
+    image: sol-web-django:dev
     expose:
       - 8000
     env_file:
@@ -67,7 +68,7 @@ services:
         max-file: "3"
 
   nginx:
-    container_name: newsolwebapp-web-nginx
+    container_name: sol-web-nginx
     restart: unless-stopped
     depends_on:
       - django
@@ -85,7 +86,7 @@ services:
         max-file: "3"
 
   postgres:
-    container_name: newsolwebapp-web-postgres
+    container_name: sol-web-postgres
     restart: unless-stopped
     image: postgres:17-alpine
     healthcheck:
@@ -108,7 +109,7 @@ services:
         max-file: "3"
 
   redis:
-    container_name: newsolwebapp-redis
+    container_name: sol-web-redis
     restart: unless-stopped
     image: redis:7-alpine
     command: >
@@ -125,8 +126,8 @@ services:
       REDIS_PASSWORD: solsecretpassredis
       REDIS_HOST: redis
   scheduler:
-    container_name: newsolwebapp-scheduler
-    image: newsolwebapp-django:dev
+    container_name: sol-web-scheduler
+    image: sol-web-django:dev
     restart: unless-stopped
     command: celery -A celeryapp.celery:app beat -S redbeat.RedBeatScheduler --loglevel=info
     depends_on:
@@ -145,8 +146,8 @@ services:
         max-file: "3"
 
   worker:
-    container_name: newsolwebapp-worker
-    image: newsolwebapp-django:dev
+    container_name: sol-web-worker
+    image: sol-web-django:dev
     restart: unless-stopped
     command: celery -A celeryapp.celery:app worker --loglevel=info
     depends_on:
