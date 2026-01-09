@@ -94,6 +94,10 @@ export default function ProductionPage() {
         <li>
           <input type="checkbox" readOnly /> Configure CSP headers
         </li>
+        <li>
+          <input type="checkbox" readOnly /> Rate limiting enabled (default: 10
+          req/s, burst 20)
+        </li>
       </ul>
 
       <h3>Performance</h3>
@@ -179,8 +183,16 @@ SENTRY_DSN=https://...@sentry.io/...`}</code>
       </pre>
 
       <h2>Nginx Production Config</h2>
+      <p>
+        Rate limiting is configured in <code>nginx/nginx.conf</code> (zone) and{" "}
+        <code>nginx/prod/site.conf</code> (applied to routes):
+      </p>
       <pre>
-        <code>{`server {
+        <code>{`# In nginx.conf (http block)
+limit_req_zone $binary_remote_addr zone=api:10m rate=10r/s;
+
+# In site.conf
+server {
     listen 80;
     server_name yourdomain.com;
     return 301 https://$server_name$request_uri;
@@ -198,7 +210,17 @@ server {
     add_header X-Content-Type-Options "nosniff" always;
     add_header X-XSS-Protection "1; mode=block" always;
 
+    # Healthcheck (no rate limit)
+    location /api/healthcheck/ {
+        proxy_pass http://django:8000;
+        proxy_set_header Host $host;
+    }
+
+    # API with rate limiting
     location /api {
+        limit_req zone=api burst=20 nodelay;
+        limit_req_status 429;
+
         proxy_pass http://django:8000;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
