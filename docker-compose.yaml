@@ -11,11 +11,8 @@ services:
       target: dev
     expose:
       - 3000
-    environment:
-      ENVIRONMENT: dev
-      NEXT_PUBLIC_SITE_NAME: sol
-      NEXT_PUBLIC_SITE_BASE_DOMAIN: http://localhost
-      NEXT_PUBLIC_STRIPE_PRO_PRICE_ID: price_1SnQASRQeoF5PAdPWOezq4tj
+    env_file:
+      - .env
     depends_on:
       django:
         condition: service_healthy
@@ -42,26 +39,9 @@ services:
       - 8000
     env_file:
       - .env
-    environment:
-      ENVIRONMENT: dev
-      SITE_DOMAIN: localhost
-      SECRET_KEY: sfsado947u234hhjsdlfqsadf
-      NEXT_PUBLIC_SITE_NAME: sol
-      NEXT_PUBLIC_SITE_BASE_DOMAIN: http://localhost
-      DJANGO_SETTINGS_MODULE: settings
-      POSTGRES_DB: soldb
-      POSTGRES_USER: soluser
-      POSTGRES_PASSWORD: solsecretpass
-      REDIS_PASSWORD: solsecretpassredis
-      REDIS_HOST: redis
-      EMAIL_HOST: smtp.sendgrid.net
-      EMAIL_HOST_USER: TODO
-      PUBLIC_API: "false"
-      SENTRY_DSN: https://41ef1b7c8933eff59d081bbb720fb5b8@o4508878567440389.ingest.us.sentry.io/4508878589657088
     depends_on:
       postgres:
         condition: service_healthy
-
     logging:
       options:
         max-size: "10m"
@@ -90,7 +70,7 @@ services:
     restart: unless-stopped
     image: postgres:17-alpine
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U soluser -d soldb"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 30s
       timeout: 5s
       retries: 3
@@ -99,10 +79,8 @@ services:
       - 5432
     volumes:
       - pgdata:/var/lib/postgresql/data
-    environment:
-      POSTGRES_DB: soldb
-      POSTGRES_USER: soluser
-      POSTGRES_PASSWORD: solsecretpass
+    env_file:
+      - .env
     logging:
       options:
         max-size: "10m"
@@ -112,19 +90,18 @@ services:
     container_name: sol-web-redis
     restart: unless-stopped
     image: redis:7-alpine
-    command: >
-      --requirepass solsecretpassredis
+    command: --requirepass ${REDIS_PASSWORD}
     expose:
       - 6379
     healthcheck:
-      test: ["CMD", "redis-cli", "-a", "solsecretpassredis", "ping"]
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
       interval: 10s
       timeout: 10s
       retries: 3
       start_period: 10s
-    environment:
-      REDIS_PASSWORD: solsecretpassredis
-      REDIS_HOST: redis
+    env_file:
+      - .env
+
   scheduler:
     container_name: sol-web-scheduler
     image: sol-web-django:dev
@@ -135,9 +112,6 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-    environment:
-      REDIS_PASSWORD: solsecretpassredis
-      REDIS_HOST: redis
     env_file:
       - .env
     logging:
@@ -155,20 +129,6 @@ services:
         condition: service_healthy
     env_file:
       - .env
-    environment:
-      ENVIRONMENT: dev
-      SITE_DOMAIN: localhost
-      SECRET_KEY: sfsado947u234hhjsdlfqsadf
-      NEXT_PUBLIC_SITE_NAME: sol
-      NEXT_PUBLIC_SITE_BASE_DOMAIN: http://localhost
-      DJANGO_SETTINGS_MODULE: settings
-      POSTGRES_DB: soldb
-      POSTGRES_USER: soluser
-      POSTGRES_PASSWORD: solsecretpass
-      REDIS_PASSWORD: solsecretpassredis
-      REDIS_HOST: redis
-      EMAIL_HOST: smtp.sendgrid.net
-      EMAIL_HOST_USER: TODO
     logging:
       options:
         max-size: "10m"
