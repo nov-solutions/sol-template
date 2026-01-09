@@ -37,6 +37,8 @@ jobs:
           echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> .env
           echo "REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}" >> .env
           echo "REDIS_HOST=redis" >> .env
+          echo "EMAIL_HOST=smtp.sendgrid.net" >> .env
+          echo "EMAIL_HOST_USER=apikey" >> .env
           echo "EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }}" >> .env
 
       - name: Install Python dependencies; create Django static directory

@@ -24,10 +24,10 @@ class MailConfig(AppConfig):
             ]
             if not all(required_env_vars):
                 raise EnvironmentError(
-                    f"MailConfig.ready() failed. The required environment variables are not set."
-                    f"EMAIL_HOST: {config('EMAIL_HOST')}"
-                    f"EMAIL_HOST_USER: {config('EMAIL_HOST_USER')}"
-                    f"EMAIL_HOST_PASSWORD: {config('EMAIL_HOST_PASSWORD')}"
+                    f"MailConfig.ready() failed. The required environment variables are not set. "
+                    f"EMAIL_HOST: {config('EMAIL_HOST', '')}, "
+                    f"EMAIL_HOST_USER: {config('EMAIL_HOST_USER', '')}, "
+                    f"EMAIL_HOST_PASSWORD: {'[SET]' if config('EMAIL_HOST_PASSWORD', '') else '[NOT SET]'}"
                 )
         else:
             logger.warning("MailConfig.ready() running in development mode.")

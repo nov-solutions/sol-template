@@ -35,12 +35,12 @@ jobs:
           echo "NEXT_PUBLIC_SITE_BASE_DOMAIN=https://sol.grav.solutions" >> .env
           echo "SITE_DOMAIN=sol.grav.solutions" >> .env
           echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
-          echo "POSTGRES_DB=TODO" >> .env
-          echo "POSTGRES_USER=TODO" >> .env
+          echo "POSTGRES_DB=soldb" >> .env
+          echo "POSTGRES_USER=soluser" >> .env
           echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> .env
           echo "REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}" >> .env
-          echo "EMAIL_HOST=TODO" >> .env
-          echo "EMAIL_HOST_USER=TODO" >> .env
+          echo "EMAIL_HOST=smtp.sendgrid.net" >> .env
+          echo "EMAIL_HOST_USER=apikey" >> .env
           echo "EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }}" >> .env
 
       - name: Create Django static directory
