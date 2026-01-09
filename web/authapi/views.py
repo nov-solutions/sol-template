@@ -254,10 +254,6 @@ class GoogleLoginView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request):
-        # Redirect to allauth's Google OAuth login URL
-        pass
-
-        # Use allauth's google login URL
         return redirect("/api/auth/google/google/login/")
 
 
