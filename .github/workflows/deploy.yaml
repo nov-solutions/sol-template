@@ -3,7 +3,9 @@ name: Deploy
 on:
   push:
     branches:
-      - main # TODO: change to master
+      # TODO: migrate branching system to release branches
+      # - master # TODO: ADD BRANCH TRIGGER
+      - develop
 
 jobs:
   deploy:
@@ -17,6 +19,15 @@ jobs:
         with:
           node-version: "lts/hydrogen"
 
+      - name: Set environment variables
+        id: set-env
+        run: |
+          if [[ ${{ github.ref }} == 'refs/heads/master' ]]; then
+            echo "SERVER_IP=TODO_IP_ADDRESS" >> $GITHUB_ENV
+          else
+            echo "SERVER_IP=TODO_DEV_IP_ADDRESS" >> $GITHUB_ENV
+          fi
+
       - name: Create .env file
         run: |
           echo "ENVIRONMENT=prod" >> .env
@@ -24,15 +35,15 @@ jobs:
           echo "NEXT_PUBLIC_SITE_BASE_DOMAIN=https://sol.grav.solutions" >> .env
           echo "SITE_DOMAIN=sol.grav.solutions" >> .env
           echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
-          echo "DJANGO_SETTINGS_MODULE=settings" >> .env
-          echo "POSTGRES_DB=soldb" >> .env
-          echo "POSTGRES_USER=soluser" >> .env
+          echo "POSTGRES_DB=TODO" >> .env
+          echo "POSTGRES_USER=TODO" >> .env
           echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> .env
           echo "REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}" >> .env
-          echo "REDIS_HOST=redis" >> .env
+          echo "EMAIL_HOST=TODO" >> .env
+          echo "EMAIL_HOST_USER=TODO" >> .env
           echo "EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }}" >> .env
 
-      - name: Install Python dependencies; create Django static directory
+      - name: Create Django static directory
         run: |
           cd ./web
           pip install -r requirements.txt
@@ -40,27 +51,63 @@ jobs:
 
       - name: Expose SSH key
         run: |
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > app.pem
-          chmod 400 app.pem
+          if [[ ${{ github.ref }} == 'refs/heads/master' ]]; then
+            echo "${{ secrets.SSH_PRIVATE_KEY }}" > deploy-key.pem
+          else
+            echo "${{ secrets.DEV_SSH_PRIVATE_KEY }}" > deploy-key.pem
+          fi
+          chmod 400 deploy-key.pem
 
       - name: Sync files with server
         run: |
-          rsync -r --delete --progress --exclude-from=exclude.txt -e "ssh -i $(pwd)/app.pem -o StrictHostKeyChecking=no" . ubuntu@IP_ADDRESS:app
+          rsync -r --delete --progress --exclude-from=exclude.txt -e "ssh -i $(pwd)/deploy-key.pem -o StrictHostKeyChecking=no" . ubuntu@${{ env.SERVER_IP }}:app
 
       - name: SSH into server; rebuild Docker containers
         run: |
-          ssh -i $(pwd)/app.pem ubuntu@IP_ADDRESS 'cd app && docker compose -f docker-compose.yaml -f docker-compose.prod.yaml up --build -d'
-
-      - name: Clean up Docker resources
-        run: |
-          ssh -i $(pwd)/app.pem ubuntu@IP_ADDRESS 'cd app &&
-            echo "Before cleanup stats:" &&
-            docker system df &&
-            docker system prune -f &&
-            docker builder prune -f &&
-            echo "After cleanup stats:" &&
-            docker system df'
+          if [[ ${{ github.ref }} == 'refs/heads/master' ]]; then
+            ssh -i $(pwd)/deploy-key.pem ubuntu@${{ env.SERVER_IP }} 'cd app && docker compose -f docker-compose.yaml -f docker-compose.prod.yaml up --build -d'
+          else
+            ssh -i $(pwd)/deploy-key.pem ubuntu@${{ env.SERVER_IP }} 'cd app && docker compose -f docker-compose.yaml -f docker-compose.staging.yaml up --build -d'
+          fi
 
       - name: Remove SSH key
         run: |
-          rm app.pem
+          rm -f deploy-key.pem
+
+      # TODO: github image publishing pipeline
+      # - name: Log in to GitHub Container Registry
+      #   uses: docker/login-action@v2
+      #   with:
+      #     registry: ghcr.io
+      #     username: ${{ github.actor }}
+      #     password: ${{ secrets.GH_PAT }}
+
+      # - name: Set Docker image tag
+      #   id: set-tag
+      #   run: |
+      #     if [[ ${{ github.ref }} == 'refs/heads/master' ]]; then
+      #       echo "TAG=latest" >> $GITHUB_ENV
+      #     else
+      #       echo "TAG=dev" >> $GITHUB_ENV
+      #     fi
+
+      # - name: Build and push Next.js Docker image
+      #   uses: docker/build-push-action@v4
+      #   with:
+      #     context: ./nextjs
+      #     push: true
+      #     tags: ghcr.io/${{ github.repository }}/nextjs:${{ env.TAG }}
+
+      # - name: Build and push Nginx Docker image
+      #   uses: docker/build-push-action@v4
+      #   with:
+      #     context: .
+      #     push: true
+      #     tags: ghcr.io/${{ github.repository }}/nginx:${{ env.TAG }}
+
+      # - name: Build and push Django Docker image
+      #   uses: docker/build-push-action@v4
+      #   with:
+      #     context: ./django
+      #     push: true
+      #     tags: ghcr.io/${{ github.repository }}/django:${{ env.TAG }}

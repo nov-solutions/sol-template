@@ -29,6 +29,9 @@ mk-mig:
 key-pair:
 	aws ec2 create-key-pair --key-name sol-web --query 'KeyMaterial' --output text > app.pem
 
+key-pair:
+	aws ec2 create-key-pair --key-name newsolwebapp-web-dev --query 'KeyMaterial' --output text > app-dev.pem
+
 deploy-cdk:
 	cd cdk && cdk deploy --outputs-file outputs.json
 
