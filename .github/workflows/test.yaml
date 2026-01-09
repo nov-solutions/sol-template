@@ -47,10 +47,18 @@ jobs:
 
       - name: Build Docker containers
         run: |
-          docker compose -f docker-compose.yaml -f docker-compose.prod.yaml up --build -d
+          docker compose -f docker-compose.yaml -f docker-compose.prod.yaml up --build -d || {
+            echo "=== Docker compose failed, capturing logs ==="
+            docker ps -a
+            echo "=== Django container logs ==="
+            docker logs sol-web-django 2>&1 || true
+            echo "=== Postgres container logs ==="
+            docker logs sol-web-postgres 2>&1 || true
+            exit 1
+          }
 
       - name: Wait for Django container to be healthy
-        timeout-minutes: 2
+        timeout-minutes: 4
         run: |
           set -e
 
