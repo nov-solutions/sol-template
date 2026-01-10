@@ -1,6 +1,3 @@
-# Ignore Helm chart files
-helm/
-
 # Build artifacts
 dist/
 build/
