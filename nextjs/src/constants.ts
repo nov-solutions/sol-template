@@ -10,6 +10,8 @@ export const SITE_DESCRIPTION =
 export const SITE_BASE_DOMAIN = String(
   process.env.NEXT_PUBLIC_SITE_BASE_DOMAIN,
 );
+// TODO: replace with the project's contact email
+export const CONTACT_EMAIL = "thatcherthornberry@gmail.com";
 
 export interface Page {
   name: string;

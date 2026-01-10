@@ -27,6 +27,7 @@ jobs:
             echo "SERVER_IP=TODO_DEV_IP_ADDRESS" >> $GITHUB_ENV
           fi
 
+      # TODO: Update all environment values below for your project
       - name: Create .env file
         run: |
           echo "ENVIRONMENT=prod" >> .env

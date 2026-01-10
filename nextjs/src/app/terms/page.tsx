@@ -1,4 +1,5 @@
-import { SITE_NAME } from "@/constants";
+// TODO: Review and customize terms of service for your application
+import { CONTACT_EMAIL, SITE_NAME } from "@/constants";
 import Link from "next/link";
 
 export const metadata = {
@@ -39,7 +40,13 @@ export default function TermsPage() {
         </p>
 
         <h2>5. Contact</h2>
-        <p>If you have any questions about these Terms, please contact us.</p>
+        <p>
+          If you have any questions about these Terms, please contact us at{" "}
+          <a href={`mailto:${CONTACT_EMAIL}`} className="underline">
+            {CONTACT_EMAIL}
+          </a>
+          .
+        </p>
 
         <hr />
 
