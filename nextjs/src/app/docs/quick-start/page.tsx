@@ -25,14 +25,21 @@ export default function QuickStartPage() {
           <strong>AWS</strong> - Production infrastructure (EC2, VPC)
         </li>
         <li>
+          <strong>Domain Registrar</strong> - Custom domain (e.g., Namecheap,
+          Cloudflare, Route 53)
+        </li>
+        <li>
           <strong>Stripe</strong> - Payment processing and subscriptions
         </li>
         <li>
-          <strong>Google Cloud</strong> - OAuth authentication (optional)
+          <strong>Google Cloud</strong> - OAuth authentication
         </li>
         <li>
           <strong>SendGrid</strong> - Transactional email (or other SMTP
           provider)
+        </li>
+        <li>
+          <strong>Sentry</strong> - Error tracking and monitoring
         </li>
       </ul>
 
@@ -126,7 +133,7 @@ cd your-project`}</code>
             <td>
               <code>DEV_SSH_PRIVATE_KEY</code>
             </td>
-            <td>Staging server SSH key (optional)</td>
+            <td>Staging server SSH key</td>
             <td>Same as above, for staging environment</td>
           </tr>
         </tbody>
@@ -171,10 +178,6 @@ git push -u origin develop`}</code>
               Add status check: <code>test</code>
             </li>
           </ul>
-        </li>
-        <li>
-          <strong>Do not allow bypassing the above settings</strong> (optional
-          but recommended)
         </li>
       </ul>
       <p>
