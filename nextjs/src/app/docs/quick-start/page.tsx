@@ -111,13 +111,29 @@ cd your-project`}</code>
         </tbody>
       </table>
 
-      <h3>2.2 Set Up Branch Protection Rules</h3>
+      <h3>2.2 Create Branch Structure</h3>
+      <p>Sol uses a two-branch strategy for deployments:</p>
+      <ul>
+        <li>
+          <code>master</code> - Production environment
+        </li>
+        <li>
+          <code>develop</code> - Development/staging environment
+        </li>
+      </ul>
+      <p>Create the develop branch:</p>
+      <pre>
+        <code>{`git checkout -b develop
+git push -u origin develop`}</code>
+      </pre>
+
+      <h3>2.3 Set Up Branch Protection Rules</h3>
       <p>
         Go to your repository → <strong>Settings</strong> →{" "}
         <strong>Branches</strong> → <strong>Add branch protection rule</strong>
       </p>
       <p>
-        For the <code>master</code> branch, enable:
+        For both <code>master</code> and <code>develop</code> branches, enable:
       </p>
       <ul>
         <li>
@@ -140,6 +156,12 @@ cd your-project`}</code>
           but recommended)
         </li>
       </ul>
+      <p>
+        <strong>Workflow:</strong> Create feature branches from{" "}
+        <code>develop</code>, merge to <code>develop</code> for staging, then
+        merge <code>develop</code> to <code>master</code> for production
+        releases.
+      </p>
 
       <hr />
 
@@ -157,24 +179,43 @@ cd your-project`}</code>
 
       <h3>3.2 Update Environment Configuration</h3>
       <p>
-        Create your local <code>.env</code> file:
+        Create a <code>.env</code> file in the project root with the following
+        variables:
       </p>
       <pre>
-        <code>{`cp .env.example .env`}</code>
+        <code>{`# App Configuration
+ENVIRONMENT=dev
+NEXT_PUBLIC_SITE_NAME=
+NEXT_PUBLIC_SITE_BASE_DOMAIN=
+SITE_DOMAIN=
+
+# Django
+SECRET_KEY=
+DJANGO_SETTINGS_MODULE=settings
+
+# Database
+POSTGRES_DB=
+POSTGRES_USER=
+POSTGRES_PASSWORD=
+
+# Redis
+REDIS_HOST=redis
+REDIS_PASSWORD=
+
+# Email (SendGrid)
+EMAIL_HOST=smtp.sendgrid.net
+EMAIL_HOST_USER=apikey
+EMAIL_HOST_PASSWORD=
+
+# Stripe
+STRIPE_PUBLISHABLE_KEY=
+STRIPE_SECRET_KEY=
+STRIPE_WEBHOOK_SECRET=
+
+# Google OAuth
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=`}</code>
       </pre>
-      <p>Update the values for your project. Key variables:</p>
-      <ul>
-        <li>
-          <code>NEXT_PUBLIC_SITE_NAME</code> - Your app name
-        </li>
-        <li>
-          <code>SITE_DOMAIN</code> - Your domain (e.g., myapp.com)
-        </li>
-        <li>
-          <code>NEXT_PUBLIC_SITE_BASE_DOMAIN</code> - Full URL (e.g.,
-          https://myapp.com)
-        </li>
-      </ul>
 
       <h3>3.3 Update Branding Assets</h3>
       <p>
