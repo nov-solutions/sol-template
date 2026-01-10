@@ -35,13 +35,21 @@ jobs:
           echo "NEXT_PUBLIC_SITE_BASE_DOMAIN=https://sol.grav.solutions" >> .env
           echo "SITE_DOMAIN=sol.grav.solutions" >> .env
           echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
+          echo "DJANGO_SETTINGS_MODULE=settings" >> .env
           echo "POSTGRES_DB=soldb" >> .env
           echo "POSTGRES_USER=soluser" >> .env
           echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> .env
           echo "REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}" >> .env
+          echo "REDIS_HOST=redis" >> .env
           echo "EMAIL_HOST=smtp.sendgrid.net" >> .env
           echo "EMAIL_HOST_USER=apikey" >> .env
           echo "EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }}" >> .env
+          echo "STRIPE_PUBLISHABLE_KEY=${{ secrets.STRIPE_PUBLISHABLE_KEY }}" >> .env
+          echo "STRIPE_SECRET_KEY=${{ secrets.STRIPE_SECRET_KEY }}" >> .env
+          echo "STRIPE_WEBHOOK_SECRET=${{ secrets.STRIPE_WEBHOOK_SECRET }}" >> .env
+          echo "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" >> .env
+          echo "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" >> .env
+          echo "SENTRY_DSN=${{ secrets.SENTRY_DSN }}" >> .env
 
       - name: Create Django static directory
         run: |

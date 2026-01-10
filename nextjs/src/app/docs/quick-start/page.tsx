@@ -136,6 +136,52 @@ cd your-project`}</code>
             <td>Staging server SSH key</td>
             <td>Same as above, for staging environment</td>
           </tr>
+          <tr>
+            <td>
+              <code>STRIPE_PUBLISHABLE_KEY</code>
+            </td>
+            <td>Stripe publishable key</td>
+            <td>Get from Stripe Dashboard → Developers → API keys</td>
+          </tr>
+          <tr>
+            <td>
+              <code>STRIPE_SECRET_KEY</code>
+            </td>
+            <td>Stripe secret key</td>
+            <td>Get from Stripe Dashboard → Developers → API keys</td>
+          </tr>
+          <tr>
+            <td>
+              <code>STRIPE_WEBHOOK_SECRET</code>
+            </td>
+            <td>Stripe webhook signing secret</td>
+            <td>Get from Stripe Dashboard → Developers → Webhooks</td>
+          </tr>
+          <tr>
+            <td>
+              <code>GOOGLE_CLIENT_ID</code>
+            </td>
+            <td>Google OAuth client ID</td>
+            <td>
+              Get from Google Cloud Console → APIs & Services → Credentials
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>GOOGLE_CLIENT_SECRET</code>
+            </td>
+            <td>Google OAuth client secret</td>
+            <td>
+              Get from Google Cloud Console → APIs & Services → Credentials
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>SENTRY_DSN</code>
+            </td>
+            <td>Sentry data source name</td>
+            <td>Get from Sentry → Project Settings → Client Keys (DSN)</td>
+          </tr>
         </tbody>
       </table>
 
@@ -238,7 +284,10 @@ STRIPE_WEBHOOK_SECRET=
 
 # Google OAuth
 GOOGLE_CLIENT_ID=
-GOOGLE_CLIENT_SECRET=`}</code>
+GOOGLE_CLIENT_SECRET=
+
+# Sentry (Error Tracking)
+SENTRY_DSN=`}</code>
       </pre>
 
       <h3>3.3 Update Branding Assets</h3>
