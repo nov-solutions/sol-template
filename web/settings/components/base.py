@@ -128,16 +128,18 @@ ALLOWED_HOSTS = [
     "*",  # catch all
 ]
 
+# TODO: Update with your staging/production domains
 CORS_ALLOWED_ORIGINS = [
     "http://localhost",
     SITE_BASE_DOMAIN,
-    "https://dev.sol.grav.solutions",
+    "https://dev.yourdomain.com",
 ]
 
+# TODO: Update with your staging/production domains
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost",
     SITE_BASE_DOMAIN,
-    "https://dev.sol.grav.solutions",
+    "https://dev.yourdomain.com",
 ]
 
 ROOT_URLCONF = "web.urls"

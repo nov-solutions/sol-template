@@ -1,4 +1,5 @@
-import { SITE_NAME } from "@/constants";
+// TODO: Review and customize privacy policy for your application
+import { CONTACT_EMAIL, SITE_NAME } from "@/constants";
 import Link from "next/link";
 
 export const metadata = {
@@ -51,8 +52,12 @@ export default function PrivacyPage() {
 
         <h2>7. Contact Us</h2>
         <p>
-          If you have any questions about this Privacy Policy, please contact
-          us.
+          If you have any questions about this Privacy Policy, please contact us
+          at{" "}
+          <a href={`mailto:${CONTACT_EMAIL}`} className="underline">
+            {CONTACT_EMAIL}
+          </a>
+          .
         </p>
 
         <hr />

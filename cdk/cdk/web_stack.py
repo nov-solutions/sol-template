@@ -40,7 +40,7 @@ class WebStack(Stack):
             description="Allow HTTP access from the Internet",
         )
 
-        # add ingress rule for port 443# TODO: github image publishing pipeline
+        # add ingress rule for port 443
         security_group.add_ingress_rule(
             peer=ec2.Peer.any_ipv4(),
             connection=ec2.Port.tcp(443),

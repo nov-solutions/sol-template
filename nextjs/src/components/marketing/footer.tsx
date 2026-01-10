@@ -1,4 +1,4 @@
-import { SITE_NAME } from "@/constants";
+import { CONTACT_EMAIL, SITE_NAME } from "@/constants";
 import { RiGithubLine, RiTwitterXLine } from "@remixicon/react";
 import Link from "next/link";
 
@@ -7,10 +7,12 @@ export default function Footer() {
     { name: "Features", href: "/#features" },
     { name: "Pricing", href: "/pricing" },
     { name: "Docs", href: "/docs" },
+    { name: "Contact", href: `mailto:${CONTACT_EMAIL}` },
     { name: "Privacy", href: "/privacy" },
     { name: "Terms", href: "/terms" },
   ];
 
+  // TODO: Update social media links to your accounts
   const socials = [
     { name: "GitHub", icon: RiGithubLine, href: "https://github.com" },
     { name: "Twitter", icon: RiTwitterXLine, href: "https://twitter.com" },

@@ -25,14 +25,21 @@ export default function QuickStartPage() {
           <strong>AWS</strong> - Production infrastructure (EC2, VPC)
         </li>
         <li>
+          <strong>Domain Registrar</strong> - Custom domain (e.g., Namecheap,
+          Cloudflare, Route 53)
+        </li>
+        <li>
           <strong>Stripe</strong> - Payment processing and subscriptions
         </li>
         <li>
-          <strong>Google Cloud</strong> - OAuth authentication (optional)
+          <strong>Google Cloud</strong> - OAuth authentication
         </li>
         <li>
           <strong>SendGrid</strong> - Transactional email (or other SMTP
           provider)
+        </li>
+        <li>
+          <strong>Sentry</strong> - Error tracking and monitoring
         </li>
       </ul>
 
@@ -126,8 +133,54 @@ cd your-project`}</code>
             <td>
               <code>DEV_SSH_PRIVATE_KEY</code>
             </td>
-            <td>Staging server SSH key (optional)</td>
+            <td>Staging server SSH key</td>
             <td>Same as above, for staging environment</td>
+          </tr>
+          <tr>
+            <td>
+              <code>STRIPE_PUBLISHABLE_KEY</code>
+            </td>
+            <td>Stripe publishable key</td>
+            <td>Get from Stripe Dashboard → Developers → API keys</td>
+          </tr>
+          <tr>
+            <td>
+              <code>STRIPE_SECRET_KEY</code>
+            </td>
+            <td>Stripe secret key</td>
+            <td>Get from Stripe Dashboard → Developers → API keys</td>
+          </tr>
+          <tr>
+            <td>
+              <code>STRIPE_WEBHOOK_SECRET</code>
+            </td>
+            <td>Stripe webhook signing secret</td>
+            <td>Get from Stripe Dashboard → Developers → Webhooks</td>
+          </tr>
+          <tr>
+            <td>
+              <code>GOOGLE_CLIENT_ID</code>
+            </td>
+            <td>Google OAuth client ID</td>
+            <td>
+              Get from Google Cloud Console → APIs & Services → Credentials
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>GOOGLE_CLIENT_SECRET</code>
+            </td>
+            <td>Google OAuth client secret</td>
+            <td>
+              Get from Google Cloud Console → APIs & Services → Credentials
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>SENTRY_DSN</code>
+            </td>
+            <td>Sentry data source name</td>
+            <td>Get from Sentry → Project Settings → Client Keys (DSN)</td>
           </tr>
         </tbody>
       </table>
@@ -171,10 +224,6 @@ git push -u origin develop`}</code>
               Add status check: <code>test</code>
             </li>
           </ul>
-        </li>
-        <li>
-          <strong>Do not allow bypassing the above settings</strong> (optional
-          but recommended)
         </li>
       </ul>
       <p>
@@ -235,7 +284,10 @@ STRIPE_WEBHOOK_SECRET=
 
 # Google OAuth
 GOOGLE_CLIENT_ID=
-GOOGLE_CLIENT_SECRET=`}</code>
+GOOGLE_CLIENT_SECRET=
+
+# Sentry (Error Tracking)
+SENTRY_DSN=`}</code>
       </pre>
 
       <h3>3.3 Update Branding Assets</h3>
@@ -267,13 +319,6 @@ GOOGLE_CLIENT_SECRET=`}</code>
       <p>
         Search the codebase for <code>TODO</code> and update:
       </p>
-      <ul>
-        <li>
-          Server IP addresses in <code>.github/workflows/deploy.yaml</code>
-        </li>
-        <li>Domain names in nginx configuration</li>
-        <li>Any other project-specific values</li>
-      </ul>
 
       <hr />
 
@@ -317,7 +362,7 @@ GOOGLE_CLIENT_SECRET=`}</code>
           </a>
         </li>
         <li>
-          <strong>Admin:</strong>{" "}
+          <strong>Django Admin Panel:</strong>{" "}
           <a href="http://localhost/api/admin" target="_blank" rel="noopener">
             http://localhost/api/admin
           </a>

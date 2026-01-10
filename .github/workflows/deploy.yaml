@@ -27,6 +27,7 @@ jobs:
             echo "SERVER_IP=TODO_DEV_IP_ADDRESS" >> $GITHUB_ENV
           fi
 
+      # TODO: Update all environment values below for your project
       - name: Create .env file
         run: |
           echo "ENVIRONMENT=prod" >> .env
@@ -34,13 +35,21 @@ jobs:
           echo "NEXT_PUBLIC_SITE_BASE_DOMAIN=https://sol.grav.solutions" >> .env
           echo "SITE_DOMAIN=sol.grav.solutions" >> .env
           echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
+          echo "DJANGO_SETTINGS_MODULE=settings" >> .env
           echo "POSTGRES_DB=soldb" >> .env
           echo "POSTGRES_USER=soluser" >> .env
           echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> .env
           echo "REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}" >> .env
+          echo "REDIS_HOST=redis" >> .env
           echo "EMAIL_HOST=smtp.sendgrid.net" >> .env
           echo "EMAIL_HOST_USER=apikey" >> .env
           echo "EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }}" >> .env
+          echo "STRIPE_PUBLISHABLE_KEY=${{ secrets.STRIPE_PUBLISHABLE_KEY }}" >> .env
+          echo "STRIPE_SECRET_KEY=${{ secrets.STRIPE_SECRET_KEY }}" >> .env
+          echo "STRIPE_WEBHOOK_SECRET=${{ secrets.STRIPE_WEBHOOK_SECRET }}" >> .env
+          echo "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" >> .env
+          echo "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" >> .env
+          echo "SENTRY_DSN=${{ secrets.SENTRY_DSN }}" >> .env
 
       - name: Create Django static directory
         run: |
@@ -72,41 +81,3 @@ jobs:
       - name: Remove SSH key
         run: |
           rm -f deploy-key.pem
-
-      # TODO: github image publishing pipeline
-      # - name: Log in to GitHub Container Registry
-      #   uses: docker/login-action@v2
-      #   with:
-      #     registry: ghcr.io
-      #     username: ${{ github.actor }}
-      #     password: ${{ secrets.GH_PAT }}
-
-      # - name: Set Docker image tag
-      #   id: set-tag
-      #   run: |
-      #     if [[ ${{ github.ref }} == 'refs/heads/master' ]]; then
-      #       echo "TAG=latest" >> $GITHUB_ENV
-      #     else
-      #       echo "TAG=dev" >> $GITHUB_ENV
-      #     fi
-
-      # - name: Build and push Next.js Docker image
-      #   uses: docker/build-push-action@v4
-      #   with:
-      #     context: ./nextjs
-      #     push: true
-      #     tags: ghcr.io/${{ github.repository }}/nextjs:${{ env.TAG }}
-
-      # - name: Build and push Nginx Docker image
-      #   uses: docker/build-push-action@v4
-      #   with:
-      #     context: .
-      #     push: true
-      #     tags: ghcr.io/${{ github.repository }}/nginx:${{ env.TAG }}
-
-      # - name: Build and push Django Docker image
-      #   uses: docker/build-push-action@v4
-      #   with:
-      #     context: ./django
-      #     push: true
-      #     tags: ghcr.io/${{ github.repository }}/django:${{ env.TAG }}

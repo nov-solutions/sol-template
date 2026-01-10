@@ -98,9 +98,9 @@ export default function RootLayout({
               url: SITE_BASE_DOMAIN,
               name: SITE_NAME,
               description: SITE_DESCRIPTION,
-              foundingDate: "2024",
+              foundingDate: "2022", // TODO: Update founding year
               logo: "/public/assets/img/logos/logo.png",
-              // TODO: update social media links
+              // TODO: Update social media links
               sameAs: ["https://www.linkedin.com/company/nov"],
             }),
           }}

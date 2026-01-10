@@ -26,6 +26,7 @@ jobs:
         run: |
           rm -f .env
 
+      # TODO: Update all environment values below for your project
       - name: Create .env file
         run: |
           echo "ENVIRONMENT=prod" >> .env
@@ -42,6 +43,12 @@ jobs:
           echo "EMAIL_HOST=smtp.sendgrid.net" >> .env
           echo "EMAIL_HOST_USER=apikey" >> .env
           echo "EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }}" >> .env
+          echo "STRIPE_PUBLISHABLE_KEY=${{ secrets.STRIPE_PUBLISHABLE_KEY }}" >> .env
+          echo "STRIPE_SECRET_KEY=${{ secrets.STRIPE_SECRET_KEY }}" >> .env
+          echo "STRIPE_WEBHOOK_SECRET=${{ secrets.STRIPE_WEBHOOK_SECRET }}" >> .env
+          echo "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" >> .env
+          echo "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" >> .env
+          echo "SENTRY_DSN=${{ secrets.SENTRY_DSN }}" >> .env
 
       - name: Install Python dependencies; create Django static directory
         run: |

@@ -109,7 +109,7 @@ def configure_sentry():
 
         # Configure scope defaults
         with sentry_sdk.configure_scope() as scope:
-            scope.set_tag("app", "sol-web")
+            scope.set_tag("app", "sol-web")  # TODO: Update app identifier
             scope.set_context(
                 "app_info",
                 {

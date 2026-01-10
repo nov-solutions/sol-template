@@ -6,8 +6,7 @@ const ProgressBarProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <ProgressProvider
       height="3px"
-      // TODO: update the progress bar color with the project's progress bar color
-      color="#FFFFFF"
+      color="hsl(var(--primary))"
       options={{ showSpinner: false }}
       shallowRouting
     >
