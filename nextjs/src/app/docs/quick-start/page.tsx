@@ -310,7 +310,7 @@ GOOGLE_CLIENT_SECRET=`}</code>
           </a>
         </li>
         <li>
-          <strong>Admin:</strong>{" "}
+          <strong>Django Admin Panel:</strong>{" "}
           <a href="http://localhost/api/admin" target="_blank" rel="noopener">
             http://localhost/api/admin
           </a>
