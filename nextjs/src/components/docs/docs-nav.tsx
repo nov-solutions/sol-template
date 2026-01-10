@@ -3,6 +3,11 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import {
+  Collapsible,
+  CollapsibleTrigger,
+  CollapsibleContent,
+} from "@/components/ui/collapsible";
 
 interface NavItem {
   title: string;
@@ -53,29 +58,40 @@ const navigation: NavSection[] = [
 export function DocsNav() {
   const pathname = usePathname();
 
+  const isSectionActive = (section: NavSection) => {
+    return section.items.some((item) => pathname === item.href);
+  };
+
   return (
-    <nav className="sticky top-24 space-y-8">
+    <nav className="sticky top-24 space-y-1">
       {navigation.map((section) => (
-        <div key={section.title}>
-          <h4 className="font-semibold text-sm mb-3">{section.title}</h4>
-          <ul className="space-y-2">
-            {section.items.map((item) => (
-              <li key={item.href}>
+        <Collapsible
+          key={section.title}
+          defaultOpen={isSectionActive(section)}
+          className="py-1"
+        >
+          <CollapsibleTrigger className="text-sm font-medium py-1.5 px-2 rounded-md w-full hover:bg-muted/50 transition-colors text-foreground">
+            {section.title}
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <div className="mt-1 ml-3 border-l border-border pl-3 space-y-0.5">
+              {section.items.map((item) => (
                 <Link
+                  key={item.href}
                   href={item.href}
                   className={cn(
-                    "block text-sm py-1 transition-colors",
+                    "block text-sm py-1 px-2 rounded-md transition-colors",
                     pathname === item.href
-                      ? "text-primary font-medium"
-                      : "text-muted-foreground hover:text-foreground",
+                      ? "text-primary font-medium bg-primary/5"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted/50",
                   )}
                 >
                   {item.title}
                 </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
+              ))}
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
       ))}
     </nav>
   );

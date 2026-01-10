@@ -14,6 +14,20 @@ __pycache__
 *.cache
 static
 staticfile
+.bash_profile
+.bashrc
+.gitconfig
+.gitmodules
+.idea
+.mcp.json
+.vscode
+.zprofile
+.ripgreprc
+.zshrc
+.profile
+.claude/
+
+
 
 # nextjs
 node_modules
