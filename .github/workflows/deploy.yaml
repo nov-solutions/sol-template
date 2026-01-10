@@ -3,8 +3,7 @@ name: Deploy
 on:
   push:
     branches:
-      # TODO: migrate branching system to release branches
-      # - master # TODO: ADD BRANCH TRIGGER
+      - master
       - develop
 
 jobs:

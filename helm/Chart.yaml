@@ -14,8 +14,9 @@ home: https://github.com/nov-solutions/sol-web
 sources:
   - https://github.com/nov-solutions/sol-web
 maintainers:
-  - name: TODO
-    email: TODO@TODO.com
+  # TODO: set maintainer info
+  - name: Thatcher Thornberry
+    email: thatcherthornberry@gmail.com
 dependencies:
   - name: postgresql
     version: "~13.2.0"

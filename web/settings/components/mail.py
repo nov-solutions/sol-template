@@ -5,7 +5,7 @@ logger = structlog.get_logger(__name__)
 
 EMAIL_PORT = 587
 # TODO: set the default from email
-DEFAULT_FROM_EMAIL = "sol <noreply@grav.solutions>"
+DEFAULT_FROM_EMAIL = "sol <thatcherthornberry@gmail.com>"
 
 if config("ENVIRONMENT", default=False) == "prod":
     # SendGrid

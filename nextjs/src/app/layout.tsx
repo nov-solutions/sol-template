@@ -17,7 +17,26 @@ export const metadata: Metadata = {
   description: SITE_DESCRIPTION,
   applicationName: SITE_NAME,
   referrer: "origin-when-cross-origin",
-  keywords: ["TODO"],
+  // TODO: update the keywords with relevant keywords for the project
+  keywords: [
+    "saas template",
+    "saas boilerplate",
+    "nextjs django",
+    "fullstack template",
+    "stripe integration",
+    "authentication boilerplate",
+    "nextjs starter kit",
+    "django rest framework",
+    "tailwind template",
+    "shadcn ui",
+    "docker compose",
+    "celery redis",
+    "subscription billing",
+    "aws deployment",
+    "typescript react",
+    "postgresql",
+    "saas starter",
+  ],
   authors: [{ name: `${SITE_NAME}` }],
   creator: `${SITE_NAME}`,
   publisher: `${SITE_NAME}`,
@@ -81,7 +100,8 @@ export default function RootLayout({
               description: SITE_DESCRIPTION,
               foundingDate: "2024",
               logo: "/public/assets/img/logos/logo.png",
-              sameAs: ["https://www.linkedin.com/company/TODO"],
+              // TODO: update social media links
+              sameAs: ["https://www.linkedin.com/company/nov"],
             }),
           }}
         />

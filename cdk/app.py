@@ -6,7 +6,8 @@ from cdk.web_stack import WebStack
 
 CDK_ACCOUNT = "844884166370"
 CDK_REGION = "us-west-2"
-SITE_NAME = "TODO"
+# TODO: set the site name
+SITE_NAME = "sol-web"
 
 app = cdk.App()
 
