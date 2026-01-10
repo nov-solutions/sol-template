@@ -267,13 +267,6 @@ GOOGLE_CLIENT_SECRET=`}</code>
       <p>
         Search the codebase for <code>TODO</code> and update:
       </p>
-      <ul>
-        <li>
-          Server IP addresses in <code>.github/workflows/deploy.yaml</code>
-        </li>
-        <li>Domain names in nginx configuration</li>
-        <li>Any other project-specific values</li>
-      </ul>
 
       <hr />
 
