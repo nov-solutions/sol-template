@@ -8,7 +8,7 @@ export default function DocsPage() {
       <p className="lead">
         {SITE_NAME} is a production-ready full-stack template for building SaaS
         applications. It includes authentication, payments, background jobs, and
-        more—all pre-configured and ready to customize.
+        more - all pre-configured and ready to customize.
       </p>
 
       <h2>What&apos;s Included</h2>
@@ -46,8 +46,8 @@ export default function DocsPage() {
       <h2>Tech Stack</h2>
       <div className="grid md:grid-cols-2 gap-4 not-prose my-6">
         <div className="border rounded-lg p-4">
-          <h4 className="font-semibold mb-2">Frontend</h4>
-          <ul className="text-sm text-muted-foreground space-y-1">
+          <h4 className="font-semibold text-foreground mb-2">Frontend</h4>
+          <ul className="text-sm text-foreground space-y-1">
             <li>Next.js 14 (App Router)</li>
             <li>TypeScript</li>
             <li>Tailwind CSS</li>
@@ -55,8 +55,8 @@ export default function DocsPage() {
           </ul>
         </div>
         <div className="border rounded-lg p-4">
-          <h4 className="font-semibold mb-2">Backend</h4>
-          <ul className="text-sm text-muted-foreground space-y-1">
+          <h4 className="font-semibold text-foreground mb-2">Backend</h4>
+          <ul className="text-sm text-foreground space-y-1">
             <li>Django 5</li>
             <li>Django REST Framework</li>
             <li>PostgreSQL</li>
