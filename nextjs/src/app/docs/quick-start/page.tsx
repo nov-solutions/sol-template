@@ -7,12 +7,33 @@ export default function QuickStartPage() {
       </p>
 
       <h2>Prerequisites</h2>
+
+      <h3>Local Tools</h3>
       <ul>
         <li>Docker and Docker Compose</li>
         <li>Git</li>
-        <li>Node.js 18+ (for local frontend development)</li>
-        <li>Python 3.10+ (for running setup scripts)</li>
-        <li>A GitHub account</li>
+        <li>Node.js 18+</li>
+        <li>Python 3.10+</li>
+      </ul>
+
+      <h3>Accounts Required</h3>
+      <ul>
+        <li>
+          <strong>GitHub</strong> - Repository hosting and CI/CD
+        </li>
+        <li>
+          <strong>AWS</strong> - Production infrastructure (EC2, VPC)
+        </li>
+        <li>
+          <strong>Stripe</strong> - Payment processing and subscriptions
+        </li>
+        <li>
+          <strong>Google Cloud</strong> - OAuth authentication (optional)
+        </li>
+        <li>
+          <strong>SendGrid</strong> - Transactional email (or other SMTP
+          provider)
+        </li>
       </ul>
 
       <hr />
@@ -306,6 +327,98 @@ GOOGLE_CLIENT_SECRET=`}</code>
       <h3>4.4 Create an Admin User</h3>
       <pre>
         <code>{`docker exec -it sol-web-django python manage.py createsuperuser`}</code>
+      </pre>
+
+      <hr />
+
+      <h2>Part 5: Production Deployment (AWS)</h2>
+
+      <h3>5.1 Prerequisites</h3>
+      <p>Install the required CLI tools:</p>
+      <ul>
+        <li>
+          <a
+            href="https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html"
+            target="_blank"
+            rel="noopener"
+          >
+            AWS CLI
+          </a>{" "}
+          - Configure with <code>aws configure</code>
+        </li>
+        <li>
+          <a
+            href="https://docs.aws.amazon.com/cdk/latest/guide/cli.html"
+            target="_blank"
+            rel="noopener"
+          >
+            AWS CDK
+          </a>{" "}
+          - Install with <code>npm install -g aws-cdk</code>
+        </li>
+      </ul>
+
+      <h3>5.2 Configure AWS Account</h3>
+      <p>
+        Update <code>cdk/app.py</code> with your AWS account ID and region:
+      </p>
+      <pre>
+        <code>{`CDK_ACCOUNT = "123456789012"  # Your AWS account ID
+CDK_REGION = "us-east-1"       # Your preferred region`}</code>
+      </pre>
+
+      <h3>5.3 Generate SSH Key Pair</h3>
+      <pre>
+        <code>{`make key-pair
+chmod 400 app.pem`}</code>
+      </pre>
+      <p>
+        Add the contents of <code>app.pem</code> to your GitHub secrets as{" "}
+        <code>SSH_PRIVATE_KEY</code>.
+      </p>
+
+      <h3>5.4 Deploy Infrastructure</h3>
+      <pre>
+        <code>{`make deploy-cdk`}</code>
+      </pre>
+      <p>
+        This provisions an EC2 instance, security groups, and other AWS
+        resources. The instance IP will be saved to{" "}
+        <code>cdk/outputs.json</code>.
+      </p>
+
+      <h3>5.5 Update Server IPs</h3>
+      <p>
+        Copy the IP address from <code>cdk/outputs.json</code> and update{" "}
+        <code>.github/workflows/deploy.yaml</code>:
+      </p>
+      <pre>
+        <code>{`echo "SERVER_IP=<your-production-ip>" >> $GITHUB_ENV  # Line 26
+echo "SERVER_IP=<your-staging-ip>" >> $GITHUB_ENV    # Line 28`}</code>
+      </pre>
+
+      <h3>5.6 Configure Domain</h3>
+      <ol>
+        <li>Acquire a domain name from your registrar</li>
+        <li>
+          Add an <strong>A record</strong>: Host <code>@</code> → Your EC2 IP
+        </li>
+        <li>
+          Add a <strong>CNAME record</strong>: Host <code>www</code> → Your
+          domain
+        </li>
+        <li>
+          Update domain references in <code>nginx/prod/site.conf</code>
+        </li>
+      </ol>
+
+      <h3>5.7 Generate SSL Certificate</h3>
+      <p>After your first deployment to master:</p>
+      <pre>
+        <code>{`make ssh
+cd /app
+chmod +x cert.sh
+./cert.sh`}</code>
       </pre>
 
       <hr />
