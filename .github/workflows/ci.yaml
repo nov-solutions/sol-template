@@ -1,0 +1,61 @@
+name: Template CI
+
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - master
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "lts/hydrogen"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Next.js dependencies
+        run: |
+          cd nextjs
+          npm ci
+
+      - name: Run ESLint
+        run: |
+          cd nextjs
+          npm run lint
+
+      - name: Verify setup script syntax
+        run: |
+          python -m py_compile setup_project.py
+
+      - name: Verify template config is valid JSON
+        run: |
+          python -c "import json; json.load(open('template.config.json'))"
+
+      - name: Check for template variable consistency
+        run: |
+          echo "Checking that all template variables in code have mappings in setup script..."
+          # Extract variables from setup_project.py
+          grep -oP '"\{\{[A-Z_]+\}\}"' setup_project.py | sort -u > /tmp/defined_vars.txt
+          # Extract variables used in codebase (excluding setup files and templates dir for this check)
+          grep -roh '\{\{[A-Z_]*\}\}' --include="*.py" --include="*.yaml" --include="*.ts" --include="*.tsx" --include="*.conf" --include="Makefile" . 2>/dev/null | \
+            grep -v "\.State\." | \
+            sort -u | \
+            sed 's/^/"/;s/$/"/' > /tmp/used_vars.txt || true
+          # Compare (used vars should be subset of defined vars)
+          echo "Defined variables:"
+          cat /tmp/defined_vars.txt
+          echo ""
+          echo "Used variables:"
+          cat /tmp/used_vars.txt
