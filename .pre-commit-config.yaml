@@ -19,6 +19,16 @@ repos:
         types: [file]
         files: '\.(js|jsx|ts|tsx|json|yaml|md|css|html)$'
 
+  # eslint for nextjs
+  - repo: local
+    hooks:
+      - id: eslint
+        name: eslint
+        entry: bash -c 'cd nextjs && npm run lint'
+        language: system
+        files: '\.(js|jsx|ts|tsx)$'
+        pass_filenames: false
+
   # python linter and formatter
   - repo: https://github.com/psf/black
     rev: 25.1.0

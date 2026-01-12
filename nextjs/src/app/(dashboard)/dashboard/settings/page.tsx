@@ -23,7 +23,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function SettingsPage() {
-  const { user, refreshUser } = useAuth();
+  const { user } = useAuth();
   const router = useRouter();
 
   // Change password state
