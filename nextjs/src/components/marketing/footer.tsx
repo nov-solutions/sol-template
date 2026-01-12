@@ -12,10 +12,9 @@ export default function Footer() {
     { name: "Terms", href: "/terms" },
   ];
 
-  // TODO: Update social media links to your accounts
   const socials = [
-    { name: "GitHub", icon: RiGithubLine, href: "https://github.com" },
-    { name: "Twitter", icon: RiTwitterXLine, href: "https://twitter.com" },
+    { name: "GitHub", icon: RiGithubLine, href: "{{SOCIAL_GITHUB}}" },
+    { name: "Twitter", icon: RiTwitterXLine, href: "{{SOCIAL_TWITTER}}" },
   ];
 
   return (

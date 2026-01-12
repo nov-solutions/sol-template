@@ -125,23 +125,19 @@ ALLOWED_HOSTS = [
     "localhost",
     SITE_DOMAIN,
     "." + SITE_DOMAIN,
-    "sol-web-django",  # k8 service name
-    "*.sol-web.svc.cluster.local",  # k8 internal DNS
     "*",  # catch all
 ]
 
-# TODO: Update with your staging/production domains
 CORS_ALLOWED_ORIGINS = [
     "http://localhost",
     SITE_BASE_DOMAIN,
-    "https://dev.yourdomain.com",
+    "https://{{DOMAIN_STAGING}}",
 ]
 
-# TODO: Update with your staging/production domains
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost",
     SITE_BASE_DOMAIN,
-    "https://dev.yourdomain.com",
+    "https://{{DOMAIN_STAGING}}",
 ]
 
 ROOT_URLCONF = "web.urls"

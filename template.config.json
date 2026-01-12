@@ -1,0 +1,48 @@
+{
+  "$schema": "./template.schema.json",
+  "_instructions": "Fill in all values below, then run: python setup_project.py",
+
+  "project": {
+    "name": "sol",
+    "description": "Your project's display name (e.g., 'My App')",
+    "name_slug": "sol-web",
+    "description_slug": "Lowercase with hyphens, used for containers/services (e.g., 'my-app-web')"
+  },
+
+  "branding": {
+    "tagline": "All-in-One Web App Template",
+    "description": "Sol is an all-in-one template for quickly spinning up a production-ready web application.",
+    "keywords": "web app, saas, template, nextjs, django",
+    "founding_year": "2024"
+  },
+
+  "contact": {
+    "email": "hello@example.com"
+  },
+
+  "domains": {
+    "production": "example.com",
+    "staging": "dev.example.com"
+  },
+
+  "social": {
+    "github": "https://github.com/your-org",
+    "twitter": "https://twitter.com/your-handle",
+    "linkedin": "https://www.linkedin.com/company/your-company"
+  },
+
+  "aws": {
+    "account_id": "123456789012",
+    "region": "us-west-2"
+  },
+
+  "database": {
+    "name": "appdb",
+    "user": "appuser"
+  },
+
+  "deployment": {
+    "production_ip": "",
+    "staging_ip": ""
+  }
+}

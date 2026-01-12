@@ -4,10 +4,9 @@ import aws_cdk as cdk
 
 from cdk.web_stack import WebStack
 
-# TODO: Update these values for your project
-CDK_ACCOUNT = "844884166370"
-CDK_REGION = "us-west-2"
-SITE_NAME = "sol"
+CDK_ACCOUNT = "{{AWS_ACCOUNT_ID}}"
+CDK_REGION = "{{AWS_REGION}}"
+SITE_NAME = "{{PROJECT_NAME}}"
 
 app = cdk.App()
 
