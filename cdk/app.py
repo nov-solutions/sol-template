@@ -4,11 +4,10 @@ import aws_cdk as cdk
 
 from cdk.web_stack import WebStack
 
-# TODO: Update with your AWS account ID
+# TODO: Update these values for your project
 CDK_ACCOUNT = "844884166370"
 CDK_REGION = "us-west-2"
-# TODO: set the site name
-SITE_NAME = "sol-web"
+SITE_NAME = "sol"
 
 app = cdk.App()
 
@@ -19,7 +18,8 @@ env = cdk.Environment(
 
 WebStack(
     app,
-    SITE_NAME + "WebStack",
+    SITE_NAME + "-web-stack",
+    site_name=SITE_NAME,
     env=env,
 )
 

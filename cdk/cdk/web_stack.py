@@ -3,14 +3,14 @@ from aws_cdk import aws_ec2 as ec2
 from aws_cdk import aws_iam as iam
 from aws_cdk import aws_s3 as s3
 from constructs import Construct
-from decouple import config
-
-SITE_NAME = config("NEXT_PUBLIC_SITE_NAME")
 
 
 class WebStack(Stack):
-    def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
+    def __init__(
+        self, scope: Construct, construct_id: str, site_name: str, **kwargs
+    ) -> None:
         super().__init__(scope, construct_id, **kwargs)
+        SITE_NAME = site_name
 
         # default vpc
         vpc = ec2.Vpc.from_lookup(
