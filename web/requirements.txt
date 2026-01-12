@@ -5,6 +5,7 @@ attrs==25.3.0
 autobahn==24.4.2
 Automat==25.4.16
 billiard==4.2.1
+boto3==1.35.0
 cachetools==5.5.2
 celery==5.5.3
 celery-redbeat==2.2.0

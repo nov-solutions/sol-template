@@ -1,6 +1,7 @@
 import {
   SITE_BASE_DOMAIN,
   SITE_DESCRIPTION,
+  SITE_KEYWORDS,
   SITE_NAME,
   SITE_TAGLINE,
 } from "@/constants";
@@ -17,26 +18,7 @@ export const metadata: Metadata = {
   description: SITE_DESCRIPTION,
   applicationName: SITE_NAME,
   referrer: "origin-when-cross-origin",
-  // TODO: update the keywords with relevant keywords for the project
-  keywords: [
-    "saas template",
-    "saas boilerplate",
-    "nextjs django",
-    "fullstack template",
-    "stripe integration",
-    "authentication boilerplate",
-    "nextjs starter kit",
-    "django rest framework",
-    "tailwind template",
-    "shadcn ui",
-    "docker compose",
-    "celery redis",
-    "subscription billing",
-    "aws deployment",
-    "typescript react",
-    "postgresql",
-    "saas starter",
-  ],
+  keywords: SITE_KEYWORDS.split(",").map((k) => k.trim()),
   authors: [{ name: `${SITE_NAME}` }],
   creator: `${SITE_NAME}`,
   publisher: `${SITE_NAME}`,
@@ -98,10 +80,9 @@ export default function RootLayout({
               url: SITE_BASE_DOMAIN,
               name: SITE_NAME,
               description: SITE_DESCRIPTION,
-              foundingDate: "2022", // TODO: Update founding year
+              foundingDate: "{{FOUNDING_YEAR}}",
               logo: "/public/assets/img/logos/logo.png",
-              // TODO: Update social media links
-              sameAs: ["https://www.linkedin.com/company/nov"],
+              sameAs: ["{{SOCIAL_LINKEDIN}}"],
             }),
           }}
         />
