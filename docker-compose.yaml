@@ -3,7 +3,7 @@ volumes:
 
 services:
   nextjs:
-    container_name: {{PROJECT_SLUG}}-nextjs
+    container_name: "{{PROJECT_SLUG}}-nextjs"
     restart: unless-stopped
     build:
       context: ./nextjs
@@ -28,13 +28,13 @@ services:
       start_period: 30s
 
   django:
-    container_name: {{PROJECT_SLUG}}-django
+    container_name: "{{PROJECT_SLUG}}-django"
     restart: unless-stopped
     build:
       context: ./web
       dockerfile: Dockerfile.django
       target: dev
-    image: {{PROJECT_SLUG}}-django:dev
+    image: "{{PROJECT_SLUG}}-django:dev"
     expose:
       - 8000
     env_file:
@@ -48,7 +48,7 @@ services:
         max-file: "3"
 
   nginx:
-    container_name: {{PROJECT_SLUG}}-nginx
+    container_name: "{{PROJECT_SLUG}}-nginx"
     restart: unless-stopped
     depends_on:
       - django
@@ -66,7 +66,7 @@ services:
         max-file: "3"
 
   postgres:
-    container_name: {{PROJECT_SLUG}}-postgres
+    container_name: "{{PROJECT_SLUG}}-postgres"
     restart: unless-stopped
     image: postgres:17-alpine
     healthcheck:
@@ -87,7 +87,7 @@ services:
         max-file: "3"
 
   redis:
-    container_name: {{PROJECT_SLUG}}-redis
+    container_name: "{{PROJECT_SLUG}}-redis"
     restart: unless-stopped
     image: redis:7-alpine
     command: --requirepass ${REDIS_PASSWORD}
@@ -103,8 +103,8 @@ services:
       - .env
 
   scheduler:
-    container_name: {{PROJECT_SLUG}}-scheduler
-    image: {{PROJECT_SLUG}}-django:dev
+    container_name: "{{PROJECT_SLUG}}-scheduler"
+    image: "{{PROJECT_SLUG}}-django:dev"
     restart: unless-stopped
     command: celery -A celeryapp.celery:app beat -S redbeat.RedBeatScheduler --loglevel=info
     depends_on:
@@ -120,8 +120,8 @@ services:
         max-file: "3"
 
   worker:
-    container_name: {{PROJECT_SLUG}}-worker
-    image: {{PROJECT_SLUG}}-django:dev
+    container_name: "{{PROJECT_SLUG}}-worker"
+    image: "{{PROJECT_SLUG}}-django:dev"
     restart: unless-stopped
     command: celery -A celeryapp.celery:app worker --loglevel=info
     depends_on:
