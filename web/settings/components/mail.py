@@ -4,8 +4,7 @@ from decouple import config
 logger = structlog.get_logger(__name__)
 
 EMAIL_PORT = 587
-# TODO: Update sender name and email address
-DEFAULT_FROM_EMAIL = "Sol <thatcherthornberry@gmail.com>"
+DEFAULT_FROM_EMAIL = "{{PROJECT_NAME}} <{{CONTACT_EMAIL}}>"
 
 if config("ENVIRONMENT", default=False) == "prod":
     # SendGrid

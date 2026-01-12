@@ -22,22 +22,21 @@ jobs:
         id: set-env
         run: |
           if [[ ${{ github.ref }} == 'refs/heads/master' ]]; then
-            echo "SERVER_IP=TODO_IP_ADDRESS" >> $GITHUB_ENV
+            echo "SERVER_IP={{PRODUCTION_IP}}" >> $GITHUB_ENV
           else
-            echo "SERVER_IP=TODO_DEV_IP_ADDRESS" >> $GITHUB_ENV
+            echo "SERVER_IP={{STAGING_IP}}" >> $GITHUB_ENV
           fi
 
-      # TODO: Update all environment values below for your project
       - name: Create .env file
         run: |
           echo "ENVIRONMENT=prod" >> .env
-          echo "NEXT_PUBLIC_SITE_NAME=sol" >> .env
-          echo "NEXT_PUBLIC_SITE_BASE_DOMAIN=https://sol.grav.solutions" >> .env
-          echo "SITE_DOMAIN=sol.grav.solutions" >> .env
+          echo "NEXT_PUBLIC_SITE_NAME={{PROJECT_NAME}}" >> .env
+          echo "NEXT_PUBLIC_SITE_BASE_DOMAIN=https://{{DOMAIN_PRODUCTION}}" >> .env
+          echo "SITE_DOMAIN={{DOMAIN_PRODUCTION}}" >> .env
           echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
           echo "DJANGO_SETTINGS_MODULE=settings" >> .env
-          echo "POSTGRES_DB=soldb" >> .env
-          echo "POSTGRES_USER=soluser" >> .env
+          echo "POSTGRES_DB={{DB_NAME}}" >> .env
+          echo "POSTGRES_USER={{DB_USER}}" >> .env
           echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> .env
           echo "REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}" >> .env
           echo "REDIS_HOST=redis" >> .env
