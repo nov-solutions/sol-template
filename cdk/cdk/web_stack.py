@@ -90,6 +90,7 @@ class WebStack(Stack):
                     ),
                 )
             ],
+            user_data=user_data,
         )
 
         elastic_ip = ec2.CfnEIP(self, SITE_NAME + "-web-eip")
