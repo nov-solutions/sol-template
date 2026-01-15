@@ -30,7 +30,7 @@ key-pair:
 	aws ec2 create-key-pair --key-name {{PROJECT_SLUG}} --query 'KeyMaterial' --output text > app.pem
 
 deploy-cdk:
-	cd cdk && cdk deploy --outputs-file outputs.json
+	cd cdk && cdk bootstrap && cdk deploy --outputs-file outputs.json
 
 venv:
 	python -m venv .venv
