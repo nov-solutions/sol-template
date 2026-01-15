@@ -18,6 +18,8 @@ if ENVIRONMENT == "dev":
     DEBUG = True
 elif ENVIRONMENT == "prod":
     DEBUG = False
+    # Trust X-Forwarded-Proto header from nginx for HTTPS detection
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "static"
