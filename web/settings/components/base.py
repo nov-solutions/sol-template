@@ -131,13 +131,11 @@ ALLOWED_HOSTS = [
 CORS_ALLOWED_ORIGINS = [
     "http://localhost",
     SITE_BASE_DOMAIN,
-    "https://{{DOMAIN_STAGING}}",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost",
     SITE_BASE_DOMAIN,
-    "https://{{DOMAIN_STAGING}}",
 ]
 
 ROOT_URLCONF = "web.urls"

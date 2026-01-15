@@ -23,7 +23,7 @@ init-mig:
 	docker exec -it {{PROJECT_SLUG}}-django python manage.py migrate
 
 mk-mig:
-	cd web && docker exec -it {{PROJECT_SLUG}}-django python manage.py migrate && docker exec -it {{PROJECT_SLUG}}-django python manage.py migrate
+	cd web && docker exec -it {{PROJECT_SLUG}}-django python manage.py makemigrations && docker exec -it {{PROJECT_SLUG}}-django python manage.py migrate
 
 
 key-pair:
