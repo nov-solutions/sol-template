@@ -1,4 +1,4 @@
-from aws_cdk import Duration, RemovalPolicy, Stack
+from aws_cdk import CfnOutput, Duration, RemovalPolicy, Stack
 from aws_cdk import aws_ec2 as ec2
 from aws_cdk import aws_iam as iam
 from aws_cdk import aws_s3 as s3
@@ -100,6 +100,14 @@ class WebStack(Stack):
             SITE_NAME + "-web-eip-association",
             eip=elastic_ip.ref,
             instance_id=instance.instance_id,
+        )
+
+        # Output the server IP address
+        CfnOutput(
+            self,
+            "ServerIP",
+            value=elastic_ip.attr_public_ip,
+            description="Public IP address of the web server",
         )
 
         # S3 bucket for database backups
