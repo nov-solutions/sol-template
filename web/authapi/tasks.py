@@ -8,7 +8,7 @@ User = get_user_model()
 
 
 @shared_task
-def send_verification_email(user_id):
+def send_verification_email(user_id, ip_address=None):
     """Send email verification link to user."""
     from .models import EmailVerificationToken
 
@@ -25,18 +25,27 @@ def send_verification_email(user_id):
     verify_url = f"{base_url}/verify-email/{token_obj.token}"
 
     subject = "Verify your email address"
-    message = f"""Hi,
 
-Please verify your email address by clicking the link below:
+    ip_line = ""
+    if ip_address:
+        ip_line = f"\nThe request for this verification originated from IP address {ip_address}\n"
+
+    message = f"""Verify your email address
+
+You need to verify your email address to continue using your account. Click the link below to verify your email address:
 
 {verify_url}
 
 This link will expire in 7 days.
+{ip_line}
+In case you did not sign up for this account and are seeing this email, please follow the instructions below:
 
-If you didn't create an account, you can ignore this email.
+- Reset your password: {base_url}/forgot-password
+- Check if any changes were made to your account settings. If yes, revert them immediately.
+- If you are unable to access your account, please contact us.
 
 Thanks,
-The Team
+Thatcher
 """
 
     send_mail(

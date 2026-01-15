@@ -8,6 +8,16 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .models import EmailVerificationToken, PasswordResetToken
+
+
+def get_client_ip(request):
+    """Extract client IP address from request, handling proxy headers."""
+    x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
+    if x_forwarded_for:
+        return x_forwarded_for.split(",")[0].strip()
+    return request.META.get("REMOTE_ADDR")
+
+
 from .serializers import (
     ChangePasswordSerializer,
     DeleteAccountSerializer,
@@ -34,8 +44,8 @@ class RegisterView(APIView):
             password=serializer.validated_data["password"],
         )
 
-        # Send verification email asynchronously
-        send_verification_email.delay(user.id)
+        client_ip = get_client_ip(request)
+        send_verification_email.delay(user.id, ip_address=client_ip)
 
         # Log the user in
         login(request, user, backend="django.contrib.auth.backends.ModelBackend")
@@ -243,7 +253,8 @@ class ResendVerificationView(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        send_verification_email.delay(user.id)
+        client_ip = get_client_ip(request)
+        send_verification_email.delay(user.id, ip_address=client_ip)
 
         return Response({"message": "Verification email sent."})
 
