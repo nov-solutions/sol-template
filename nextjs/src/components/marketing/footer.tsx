@@ -19,18 +19,18 @@ export default function Footer() {
 
   return (
     <footer className="border-t">
-      <div className="max-w-5xl mx-auto px-6 py-6">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <div className="flex items-center gap-6">
+      <div className="max-w-5xl px-6 py-6 mx-auto">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div className="flex flex-wrap items-center gap-6">
             <Link href="/" className="font-bold">
               {SITE_NAME}
             </Link>
-            <nav className="flex items-center gap-4">
+            <nav className="flex flex-wrap items-center gap-4">
               {links.map((link) => (
                 <Link
                   key={link.name}
                   href={link.href}
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  className="text-sm transition-colors text-muted-foreground hover:text-foreground"
                 >
                   {link.name}
                 </Link>
@@ -45,9 +45,9 @@ export default function Footer() {
                 href={social.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-foreground transition-colors"
+                className="transition-colors text-muted-foreground hover:text-foreground"
               >
-                <social.icon className="h-5 w-5" />
+                <social.icon className="w-5 h-5" />
               </Link>
             ))}
             <span className="text-sm text-muted-foreground">
