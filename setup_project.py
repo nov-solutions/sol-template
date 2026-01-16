@@ -19,7 +19,6 @@ import os
 import shutil
 import sys
 from pathlib import Path
-from typing import Optional
 
 EXCLUDE_PATTERNS = (
     "setup_project.py",
@@ -64,7 +63,9 @@ def load_config() -> dict:
     return config
 
 
-def prompt(label: str, default: str = "", required: bool = False, secret: bool = False) -> str:
+def prompt(
+    label: str, default: str = "", required: bool = False, secret: bool = False
+) -> str:
     """Prompt user for input with optional default value."""
     if default:
         display = f"{label} [{default}]: "
@@ -74,6 +75,7 @@ def prompt(label: str, default: str = "", required: bool = False, secret: bool =
     while True:
         if secret:
             import getpass
+
             value = getpass.getpass(display)
         else:
             value = input(display).strip()
@@ -111,7 +113,9 @@ def interactive_wizard() -> dict:
     prompt_section("Project Information")
     config["project"] = {
         "name": prompt("Project name (display name)", "My App", required=True),
-        "name_slug": prompt("Project slug (lowercase, hyphens)", "my-app-web", required=True),
+        "name_slug": prompt(
+            "Project slug (lowercase, hyphens)", "my-app-web", required=True
+        ),
     }
 
     # Branding
@@ -150,7 +154,9 @@ def interactive_wizard() -> dict:
         "account_id": prompt("AWS Account ID", "", required=True),
         "region": prompt("AWS Region", "us-west-2", required=True),
         "access_key_id": prompt("AWS Access Key ID (for backups)", ""),
-        "secret_access_key": prompt("AWS Secret Access Key (for backups)", "", secret=True),
+        "secret_access_key": prompt(
+            "AWS Secret Access Key (for backups)", "", secret=True
+        ),
     }
 
     # Database
@@ -158,8 +164,12 @@ def interactive_wizard() -> dict:
     config["database"] = {
         "name": prompt("Database name", "appdb", required=True),
         "user": prompt("Database user", "appuser", required=True),
-        "password": prompt("Database password", "change_me_secure_password", required=True),
-        "redis_password": prompt("Redis password", "change_me_redis_password", required=True),
+        "password": prompt(
+            "Database password", "change_me_secure_password", required=True
+        ),
+        "redis_password": prompt(
+            "Redis password", "change_me_redis_password", required=True
+        ),
     }
 
     # Deployment
@@ -272,20 +282,26 @@ def build_replacements(config: dict) -> dict[str, str]:
         # Django
         "{{DJANGO_SECRET_KEY}}": generate_secret_key(),
         # Stripe
-        "{{STRIPE_PUBLISHABLE_KEY}}": config.get("stripe", {}).get("publishable_key", ""),
+        "{{STRIPE_PUBLISHABLE_KEY}}": config.get("stripe", {}).get(
+            "publishable_key", ""
+        ),
         "{{STRIPE_SECRET_KEY}}": config.get("stripe", {}).get("secret_key", ""),
         "{{STRIPE_WEBHOOK_SECRET}}": config.get("stripe", {}).get("webhook_secret", ""),
         "{{STRIPE_PRO_PRICE_ID}}": config.get("stripe", {}).get("pro_price_id", ""),
         # Google OAuth
         "{{GOOGLE_CLIENT_ID}}": config.get("google_oauth", {}).get("client_id", ""),
-        "{{GOOGLE_CLIENT_SECRET}}": config.get("google_oauth", {}).get("client_secret", ""),
+        "{{GOOGLE_CLIENT_SECRET}}": config.get("google_oauth", {}).get(
+            "client_secret", ""
+        ),
         # SendGrid
         "{{SENDGRID_API_KEY}}": config.get("sendgrid", {}).get("api_key", ""),
         # Sentry
         "{{SENTRY_DSN}}": config.get("sentry", {}).get("dsn", ""),
         # Backup
         "{{BACKUP_S3_BUCKET}}": config.get("backup", {}).get("s3_bucket", ""),
-        "{{BACKUP_RETENTION_DAYS}}": config.get("backup", {}).get("retention_days", "30"),
+        "{{BACKUP_RETENTION_DAYS}}": config.get("backup", {}).get(
+            "retention_days", "30"
+        ),
         "{{BACKUP_PREFIX}}": config.get("backup", {}).get("prefix", "backups/"),
     }
 

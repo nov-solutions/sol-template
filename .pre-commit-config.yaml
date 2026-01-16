@@ -16,18 +16,33 @@ repos:
     rev: v3.1.0
     hooks:
       - id: prettier
-        types: [file]
-        files: '\.(js|jsx|ts|tsx|json|yaml|md|css|html)$'
+        files: '^nextjs/.*\.(js|jsx|ts|tsx|json|yaml|md|css|html)$'
+        args: [--write]
 
-  # eslint for nextjs
-  - repo: local
+  # typescript linter
+  - repo: https://github.com/pre-commit/mirrors-eslint
+    rev: v8.46.0
     hooks:
       - id: eslint
-        name: eslint
-        entry: bash -c 'cd nextjs && npm run lint'
+        args: [--fix]
+
+  # typescript type checker
+  - repo: local
+    hooks:
+      - id: tsc
+        name: typescript type checker
+        entry: npx --prefix nextjs tsc --noEmit --project nextjs/tsconfig.json
         language: system
-        files: '\.(js|jsx|ts|tsx)$'
+        files: '^nextjs/.*\.(ts|tsx)$'
         pass_filenames: false
+
+  # npm security audit
+  - repo: local
+    hooks:
+      - id: npm-audit
+        name: npm security audit
+        entry: bash -c "cd nextjs && npm audit --audit-level=high"
+        language: system
 
   # python linter and formatter
   - repo: https://github.com/psf/black
