@@ -7,4 +7,3 @@ from authapi.tasks import (  # noqa: F401
     send_password_reset_email,
     send_verification_email,
 )
-from dbbackup.tasks import cleanup_old_backups, create_database_backup  # noqa: F401

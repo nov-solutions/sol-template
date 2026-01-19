@@ -63,8 +63,6 @@ INSTALLED_APPS = [
     "billing.apps.BillingConfig",
     # metrics and monitoring
     "metrics.apps.MetricsConfig",
-    # database backups
-    "dbbackup.apps.DbbackupConfig",
 ]
 
 MIDDLEWARE = [

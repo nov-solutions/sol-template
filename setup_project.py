@@ -153,10 +153,6 @@ def interactive_wizard() -> dict:
     config["aws"] = {
         "account_id": prompt("AWS Account ID", "", required=True),
         "region": prompt("AWS Region", "us-west-2", required=True),
-        "access_key_id": prompt("AWS Access Key ID (for backups)", ""),
-        "secret_access_key": prompt(
-            "AWS Secret Access Key (for backups)", "", secret=True
-        ),
     }
 
     # Database
@@ -209,14 +205,6 @@ def interactive_wizard() -> dict:
     print("  Get your DSN at: https://sentry.io/settings/projects/")
     config["sentry"] = {
         "dsn": prompt("Sentry DSN", ""),
-    }
-
-    # Backup
-    prompt_section("Database Backup (optional)")
-    config["backup"] = {
-        "s3_bucket": prompt("S3 Bucket for backups", ""),
-        "retention_days": prompt("Backup retention days", "30"),
-        "prefix": prompt("Backup prefix", "backups/"),
     }
 
     print()
@@ -297,12 +285,6 @@ def build_replacements(config: dict) -> dict[str, str]:
         "{{SENDGRID_API_KEY}}": config.get("sendgrid", {}).get("api_key", ""),
         # Sentry
         "{{SENTRY_DSN}}": config.get("sentry", {}).get("dsn", ""),
-        # Backup
-        "{{BACKUP_S3_BUCKET}}": config.get("backup", {}).get("s3_bucket", ""),
-        "{{BACKUP_RETENTION_DAYS}}": config.get("backup", {}).get(
-            "retention_days", "30"
-        ),
-        "{{BACKUP_PREFIX}}": config.get("backup", {}).get("prefix", "backups/"),
     }
 
 
