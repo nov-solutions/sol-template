@@ -1,0 +1,68 @@
+{
+  "$schema": "../../template.schema.json",
+  "_instructions": "Test configuration for CI - do not use in production",
+
+  "project": {
+    "name": "Test App",
+    "name_slug": "test-app-web"
+  },
+
+  "branding": {
+    "tagline": "Test tagline for CI",
+    "description": "Test description for CI validation",
+    "keywords": "test, ci, validation",
+    "founding_year": "2024"
+  },
+
+  "contact": {
+    "email": "test@example.com"
+  },
+
+  "domains": {
+    "production": "test.example.com",
+    "staging": "staging.test.example.com"
+  },
+
+  "social": {
+    "github": "https://github.com/test-org",
+    "twitter": "https://twitter.com/test",
+    "linkedin": "https://linkedin.com/company/test"
+  },
+
+  "aws": {
+    "account_id": "123456789012",
+    "region": "us-west-2"
+  },
+
+  "database": {
+    "name": "testdb",
+    "user": "testuser",
+    "password": "test_password_123",
+    "redis_password": "test_redis_password_456"
+  },
+
+  "deployment": {
+    "production_ip": "192.0.2.1",
+    "staging_ip": "192.0.2.2"
+  },
+
+  "stripe": {
+    "publishable_key": "pk_test_placeholder",
+    "secret_key": "sk_test_placeholder",
+    "webhook_secret": "whsec_test_placeholder",
+    "pro_price_id": "price_test_placeholder"
+  },
+
+  "google_oauth": {
+    "client_id": "test-client-id.apps.googleusercontent.com",
+    "client_secret": "test-client-secret"
+  },
+
+  "sendgrid": {
+    "api_key": "SG.test_api_key_placeholder"
+  },
+
+  "sentry": {
+    "dsn": "https://test@sentry.io/123"
+  }
+}

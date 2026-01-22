@@ -11,10 +11,10 @@ import { useAuth } from "@/hooks/use-auth";
 import { axiosClient } from "@/lib/axiosClient";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function RegisterPage() {
-  const { error, clearError, refreshUser } = useAuth();
+  const { error, clearError, refreshUser, user, loading } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
@@ -23,6 +23,13 @@ export default function RegisterPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const plan = searchParams.get("plan");
+
+  // Redirect to dashboard if already authenticated
+  useEffect(() => {
+    if (user && !loading) {
+      router.replace("/dashboard");
+    }
+  }, [user, loading, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

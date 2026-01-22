@@ -42,15 +42,32 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
+  const clearInvalidSession = useCallback(async () => {
+    // Clear the invalid session cookie by calling logout endpoint
+    // This handles the case where sessionid cookie exists but session is invalid
+    try {
+      await axiosClient.post("/auth/logout/");
+    } catch {
+      // Logout endpoint may fail if session is already invalid, that's fine
+      // The cookie will be cleared by the response
+    }
+  }, []);
+
   const refreshUser = useCallback(async () => {
     try {
       const response = await axiosClient.get("/auth/user/");
       setUser(response.data);
       setError(null);
-    } catch {
+    } catch (err) {
       setUser(null);
+      // If we get a 401/403, the session cookie is invalid - clear it
+      const status = (err as { response?: { status?: number } })?.response
+        ?.status;
+      if (status === 401 || status === 403) {
+        await clearInvalidSession();
+      }
     }
-  }, []);
+  }, [clearInvalidSession]);
 
   const login = useCallback(
     async (email: string, password: string) => {
