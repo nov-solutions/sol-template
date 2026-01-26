@@ -27,9 +27,7 @@
   },
   "aws": {
     "account_id": "123456789012",
-    "region": "us-west-2",
-    "access_key_id": "",
-    "secret_access_key": ""
+    "region": "us-west-2"
   },
   "database": {
     "name": "appdb",
@@ -56,10 +54,5 @@
   },
   "sentry": {
     "dsn": ""
-  },
-  "backup": {
-    "s3_bucket": "",
-    "retention_days": "30",
-    "prefix": "backups/"
   }
 }

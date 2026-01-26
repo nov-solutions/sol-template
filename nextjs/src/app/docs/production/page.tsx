@@ -128,9 +128,6 @@ export default function ProductionPage() {
         <li>
           <input type="checkbox" readOnly /> Configure uptime monitoring
         </li>
-        <li>
-          <input type="checkbox" readOnly /> Set up database backups
-        </li>
       </ul>
 
       <h3>Third-Party Services</h3>
@@ -258,15 +255,6 @@ docker compose up -d --no-deps --build django nextjs
 
 # Run migrations
 docker exec -it app-django python manage.py migrate`}</code>
-      </pre>
-
-      <h2>Backup Strategy</h2>
-      <pre>
-        <code>{`# Database backup (run daily via cron)
-pg_dump -h $POSTGRES_HOST -U postgres sol > backup_$(date +%Y%m%d).sql
-
-# Upload to S3
-aws s3 cp backup_$(date +%Y%m%d).sql s3://your-backup-bucket/`}</code>
       </pre>
 
       <h2>Scaling</h2>

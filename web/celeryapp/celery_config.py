@@ -31,14 +31,4 @@ beat_schedule = {
         "task": "authapi.tasks.cleanup_unverified_accounts",
         "schedule": crontab(hour=3, minute=0),  # Run daily at 3 AM
     },
-    # Database backup - daily at 2 AM UTC
-    "create-database-backup": {
-        "task": "dbbackup.tasks.create_database_backup",
-        "schedule": crontab(hour=2, minute=0),
-    },
-    # Cleanup old backups - daily at 3:30 AM UTC (after backup completes)
-    "cleanup-old-backups": {
-        "task": "dbbackup.tasks.cleanup_old_backups",
-        "schedule": crontab(hour=3, minute=30),
-    },
 }
