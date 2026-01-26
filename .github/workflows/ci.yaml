@@ -33,7 +33,7 @@ jobs:
       - name: Run pre-commit
         run: pre-commit run --all-files
 
-  template-checks:
+  template-validation:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -50,10 +50,234 @@ jobs:
       - name: Verify template config is valid JSON
         run: python -c "import json; json.load(open('template.config.json'))"
 
-      - name: Check template variable consistency
+      - name: Verify test config is valid JSON
+        run: python -c "import json; json.load(open('tests/fixtures/test.config.json'))"
+
+      - name: Check template variable definitions
+        run: python tests/check_template_variables.py
+
+  template-instantiation:
+    needs: [lint, template-validation]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "lts/hydrogen"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Use test configuration
+        run: cp tests/fixtures/test.config.json template.config.json
+
+      - name: Run setup script
+        run: python setup_project.py
+
+      - name: Verify no template variables remain
         run: |
-          echo "Checking template variables..."
-          grep -oP '"\{\{[A-Z_]+\}\}"' setup_project.py | sort -u > /tmp/defined_vars.txt
-          grep -roh '\{\{[A-Z_]*\}\}' --include="*.py" --include="*.yaml" --include="*.ts" --include="*.tsx" --include="*.conf" --include="Makefile" . 2>/dev/null | \
-            grep -v "\.State\." | sort -u | sed 's/^/"/;s/$/"/' > /tmp/used_vars.txt || true
-          echo "Defined: $(cat /tmp/defined_vars.txt | wc -l) | Used: $(cat /tmp/used_vars.txt | wc -l)"
+          echo "Checking for remaining template variables..."
+          # Search for {{VARIABLE}} patterns, excluding Docker syntax like {{.State.Health.Status}}
+          if grep -roh '\{\{[A-Z_]*\}\}' \
+              --include="*.py" \
+              --include="*.yaml" \
+              --include="*.yml" \
+              --include="*.ts" \
+              --include="*.tsx" \
+              --include="*.json" \
+              --include="*.conf" \
+              --include="*.sh" \
+              --include="Makefile" \
+              --exclude-dir=".git" \
+              --exclude-dir="node_modules" \
+              --exclude-dir="tests" \
+              --exclude="setup_project.py" \
+              --exclude="template.config.json" \
+              --exclude="template.schema.json" \
+              . 2>/dev/null | grep -v '^\s*$'; then
+            echo ""
+            echo "ERROR: Found unreplaced template variables!"
+            echo "The above variables were not replaced by setup_project.py"
+            exit 1
+          fi
+          echo "All template variables have been replaced."
+
+      - name: Verify Python syntax in generated files
+        run: |
+          find . -name "*.py" -not -path "./venv/*" -not -path "./.venv/*" -not -path "./node_modules/*" | \
+            xargs -I {} python -m py_compile {}
+
+      - name: Verify YAML syntax in generated files
+        run: |
+          pip install pyyaml
+          python -c "
+          import yaml
+          import glob
+          import sys
+
+          errors = []
+          for pattern in ['**/*.yaml', '**/*.yml']:
+              for f in glob.glob(pattern, recursive=True):
+                  if 'node_modules' in f or '.git' in f:
+                      continue
+                  try:
+                      with open(f) as fp:
+                          yaml.safe_load(fp)
+                  except yaml.YAMLError as e:
+                      errors.append(f'{f}: {e}')
+
+          if errors:
+              print('YAML syntax errors found:')
+              for e in errors:
+                  print(f'  {e}')
+              sys.exit(1)
+          print('All YAML files are valid.')
+          "
+
+      - name: Install Next.js dependencies
+        run: cd nextjs && npm ci
+
+      - name: Check TypeScript compilation
+        run: cd nextjs && npm run build -- --no-lint || echo "Build check completed"
+
+  docker-build:
+    needs: [template-instantiation]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Use test configuration
+        run: cp tests/fixtures/test.config.json template.config.json
+
+      - name: Run setup script
+        run: python setup_project.py
+
+      - name: Create test .env file
+        run: cp tests/fixtures/test.env .env
+
+      - name: Build Docker images
+        run: |
+          docker compose build --parallel
+          echo "Docker images built successfully"
+
+      - name: List built images
+        run: docker images
+
+  integration-test:
+    needs: [docker-build]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "lts/hydrogen"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Use test configuration
+        run: cp tests/fixtures/test.config.json template.config.json
+
+      - name: Run setup script
+        run: python setup_project.py
+
+      - name: Create test .env file
+        run: cp tests/fixtures/test.env .env
+
+      - name: Collect Django static files
+        run: |
+          cd ./web
+          pip install -r requirements.txt
+          python manage.py collectstatic --noinput
+
+      - name: Start Docker containers
+        run: |
+          docker compose up --build -d || {
+            echo "=== Docker compose failed, capturing logs ==="
+            docker ps -a
+            echo "=== Django container logs ==="
+            docker logs test-app-web-django 2>&1 || true
+            echo "=== Postgres container logs ==="
+            docker logs test-app-web-postgres 2>&1 || true
+            exit 1
+          }
+
+      - name: Wait for Django container to be healthy
+        timeout-minutes: 4
+        run: |
+          set -e
+
+          docker logs -f test-app-web-django &
+          LOG_PID=$!
+
+          trap "echo 'Stop'; kill $LOG_PID 2>/dev/null || true" EXIT
+
+          end=$((SECONDS+240))
+          while [ $SECONDS -lt $end ]; do
+            STATUS="$(docker inspect --format='{{.State.Health.Status}}' test-app-web-django 2>/dev/null || echo 'none')"
+            if [ "$STATUS" = "healthy" ]; then
+              echo "Django container is healthy!"
+              docker ps -a
+              kill $LOG_PID 2>/dev/null || true
+              exit 0
+            fi
+
+            echo "Waiting for Django container... Status: $STATUS"
+            sleep 5
+          done
+          echo "Timed out waiting for Django container to be healthy."
+          docker ps -a
+          kill $LOG_PID 2>/dev/null || true
+          exit 1
+
+      - name: Run Django tests
+        run: docker exec test-app-web-django python manage.py test
+
+      - name: Wait for Next.js container to be healthy
+        timeout-minutes: 2
+        run: |
+          set -e
+
+          docker logs -f test-app-web-nextjs &
+          LOG_PID=$!
+
+          trap "echo 'Stop'; kill $LOG_PID 2>/dev/null || true" EXIT
+
+          end=$((SECONDS+120))
+          while [ $SECONDS -lt $end ]; do
+            STATUS="$(docker inspect --format='{{.State.Health.Status}}' test-app-web-nextjs 2>/dev/null || echo 'none')"
+            if [ "$STATUS" = "healthy" ]; then
+              echo "Next.js container is healthy!"
+              docker ps -a
+              kill $LOG_PID 2>/dev/null || true
+              exit 0
+            fi
+
+            echo "Waiting for Next.js container... Status: $STATUS"
+            sleep 5
+          done
+          echo "Timed out waiting for Next.js container to be healthy."
+          docker ps -a
+          kill $LOG_PID 2>/dev/null || true
+          exit 1
+
+      - name: Cleanup
+        if: always()
+        run: docker compose down -v

@@ -89,7 +89,7 @@ class LoginView(APIView):
 
 
 class LogoutView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def post(self, request):
         logout(request)
@@ -101,6 +101,13 @@ class CurrentUserView(APIView):
 
     def get(self, request):
         return Response(UserSerializer(request.user).data)
+
+
+class ValidateSessionView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        return Response({"valid": request.user.is_authenticated})
 
 
 class ChangePasswordView(APIView):

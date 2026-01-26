@@ -69,7 +69,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" data-theme="dark" className="antialiased">
+    <html lang="en" className="dark antialiased" suppressHydrationWarning>
       <head>
         <script
           type="application/ld+json"

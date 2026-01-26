@@ -9,16 +9,25 @@ import { AuthCard } from "@/components/auth/auth-card";
 import { GoogleButton } from "@/components/auth/google-button";
 import { useAuth } from "@/hooks/use-auth";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState, useEffect } from "react";
 
 export default function LoginPage() {
-  const { login, loading, error, clearError } = useAuth();
+  const { login, loading, error, clearError, user } = useAuth();
   const searchParams = useSearchParams();
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const googleError = searchParams.get("error") === "google_auth_failed";
+  const redirectTo = searchParams.get("redirect") || "/dashboard";
+
+  // Redirect to dashboard if already authenticated
+  useEffect(() => {
+    if (user && !loading) {
+      router.replace(redirectTo);
+    }
+  }, [user, loading, router, redirectTo]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
