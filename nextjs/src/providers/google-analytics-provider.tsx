@@ -1,8 +1,40 @@
 "use client";
 
 import Script from "next/script";
+import { usePathname, useSearchParams } from "next/navigation";
+import { Suspense, useEffect } from "react";
+
+declare global {
+  interface Window {
+    gtag: (...args: unknown[]) => void;
+  }
+}
 
 const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+
+function RouteChangeTrackerInner() {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    if (GA_MEASUREMENT_ID) {
+      window.gtag("config", GA_MEASUREMENT_ID, {
+        page_path:
+          pathname + (searchParams?.toString() ? `?${searchParams}` : ""),
+      });
+    }
+  }, [pathname, searchParams]);
+
+  return null;
+}
+
+function RouteChangeTracker() {
+  return (
+    <Suspense fallback={null}>
+      <RouteChangeTrackerInner />
+    </Suspense>
+  );
+}
 
 export function GoogleAnalyticsProvider({
   children,
@@ -27,6 +59,7 @@ export function GoogleAnalyticsProvider({
           gtag('config', '${GA_MEASUREMENT_ID}');
         `}
       </Script>
+      <RouteChangeTracker />
       {children}
     </>
   );
