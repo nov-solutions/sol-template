@@ -49,6 +49,9 @@
     "client_id": "",
     "client_secret": ""
   },
+  "google_analytics": {
+    "measurement_id": ""
+  },
   "sendgrid": {
     "api_key": ""
   },

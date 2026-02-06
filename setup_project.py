@@ -281,6 +281,10 @@ def build_replacements(config: dict) -> dict[str, str]:
         "{{GOOGLE_CLIENT_SECRET}}": config.get("google_oauth", {}).get(
             "client_secret", ""
         ),
+        # Google Analytics
+        "{{GA_MEASUREMENT_ID}}": config.get("google_analytics", {}).get(
+            "measurement_id", ""
+        ),
         # SendGrid
         "{{SENDGRID_API_KEY}}": config.get("sendgrid", {}).get("api_key", ""),
         # Sentry
