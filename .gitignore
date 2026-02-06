@@ -1,5 +1,6 @@
 # misc
 *.env
+!tests/fixtures/test.env
 *.log
 *key.json
 *.pem
