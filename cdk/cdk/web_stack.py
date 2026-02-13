@@ -109,32 +109,3 @@ class WebStack(Stack):
             value=elastic_ip.attr_public_ip,
             description="Public IP address of the web server",
         )
-
-        # Create development instance
-        # ec2.Instance(
-        #     self,
-        #     SITE_NAME + "-web-dev",
-        #     instance_type=ec2.InstanceType("t2.medium"),
-        #     machine_image=ec2.MachineImage.generic_linux(
-        #         {"us-west-2": "ami-0e4a0595b254f1a4f"}
-        #     ),
-        #     vpc=vpc,
-        #     role=iam.Role(
-        #         self,
-        #         SITE_NAME + "-dev-ec2-role",
-        #         assumed_by=iam.ServicePrincipal("ec2.amazonaws.com"),
-        #     ),
-        #     security_group=security_group,
-        #     instance_name=SITE_NAME + "-web-dev",
-        #     key_name=SITE_NAME + "-web-dev",
-        #     block_devices=[
-        #         ec2.BlockDevice(
-        #             device_name="/dev/sda1",
-        #             volume=ec2.BlockDeviceVolume.ebs(
-        #                 volume_size=50,
-        #                 delete_on_termination=True,
-        #             ),
-        #         )
-        #     ],
-        #     user_data=user_data,
-        # )
