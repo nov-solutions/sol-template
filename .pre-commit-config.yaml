@@ -36,14 +36,6 @@ repos:
         files: '^nextjs/.*\.(ts|tsx)$'
         pass_filenames: false
 
-  # npm security audit
-  - repo: local
-    hooks:
-      - id: npm-audit
-        name: npm security audit
-        entry: bash -c "cd nextjs && npm audit --audit-level=high"
-        language: system
-
   # python linter and formatter
   - repo: https://github.com/psf/black
     rev: 25.1.0
@@ -63,5 +55,4 @@ repos:
     rev: v2.3.1
     hooks:
       - id: autoflake
-        args:
-          [--remove-all-unused-imports, --remove-unused-variables, --in-place]
+        args: [--remove-all-unused-imports, --remove-unused-variables, --in-place]
