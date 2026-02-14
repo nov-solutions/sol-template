@@ -2,8 +2,6 @@ import structlog
 from django.db import connections
 from django.db.utils import OperationalError
 from django.http import JsonResponse
-from django.middleware.csrf import get_token
-from django.views.decorators.csrf import ensure_csrf_cookie
 
 logger = structlog.get_logger(__name__)
 
@@ -29,8 +27,3 @@ def healthcheck(request):
     }
 
     return JsonResponse(response_data, status=status)
-
-
-@ensure_csrf_cookie
-def get_csrf_token(request):
-    return JsonResponse({"csrftoken": get_token(request)})
