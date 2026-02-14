@@ -17,7 +17,7 @@ function RouteChangeTrackerInner() {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    if (GA_MEASUREMENT_ID) {
+    if (GA_MEASUREMENT_ID && typeof window.gtag === "function") {
       window.gtag("config", GA_MEASUREMENT_ID, {
         page_path:
           pathname + (searchParams?.toString() ? `?${searchParams}` : ""),
@@ -56,7 +56,9 @@ export function GoogleAnalyticsProvider({
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
-          gtag('config', '${GA_MEASUREMENT_ID}');
+          gtag('config', ${JSON.stringify(
+            GA_MEASUREMENT_ID,
+          )}, { send_page_view: false });
         `}
       </Script>
       <RouteChangeTracker />
