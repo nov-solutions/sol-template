@@ -21,6 +21,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { LoadingButton } from "@/components/ui/loading-button";
 import { useSubscription } from "@/hooks/use-subscription";
 import {
   RiCheckLine,
@@ -177,45 +178,36 @@ export default function BillingPage() {
                         ).toLocaleDateString()}
                       . You&apos;ll keep access until then.
                     </span>
-                    <Button
+                    <LoadingButton
                       size="sm"
                       onClick={handleReactivate}
                       disabled={actionLoading !== null}
+                      loading={actionLoading === "reactivate"}
                     >
-                      {actionLoading === "reactivate" ? (
-                        <RiLoader4Line className="h-4 w-4 animate-spin" />
-                      ) : (
-                        "Reactivate"
-                      )}
-                    </Button>
+                      Reactivate
+                    </LoadingButton>
                   </AlertDescription>
                 </Alert>
               ) : (
                 <div className="flex gap-3">
-                  <Button
+                  <LoadingButton
                     variant="outline"
                     onClick={handleOpenPortal}
                     disabled={actionLoading !== null}
+                    loading={actionLoading === "portal"}
                   >
-                    {actionLoading === "portal" ? (
-                      <RiLoader4Line className="h-4 w-4 animate-spin" />
-                    ) : (
-                      "Manage Billing"
-                    )}
-                  </Button>
+                    Manage Billing
+                  </LoadingButton>
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
-                      <Button
+                      <LoadingButton
                         variant="ghost"
                         className="text-destructive hover:text-destructive"
                         disabled={actionLoading !== null}
+                        loading={actionLoading === "cancel"}
                       >
-                        {actionLoading === "cancel" ? (
-                          <RiLoader4Line className="h-4 w-4 animate-spin" />
-                        ) : (
-                          "Cancel Subscription"
-                        )}
-                      </Button>
+                        Cancel Subscription
+                      </LoadingButton>
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                       <AlertDialogHeader>
