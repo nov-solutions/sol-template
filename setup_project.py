@@ -207,6 +207,12 @@ def interactive_wizard() -> dict:
         "dsn": prompt("Sentry DSN", ""),
     }
 
+    # Analytics
+    prompt_section("Analytics (optional)")
+    config["analytics"] = {
+        "ga_measurement_id": prompt("Google Analytics Measurement ID", ""),
+    }
+
     print()
     return config
 
@@ -285,6 +291,10 @@ def build_replacements(config: dict) -> dict[str, str]:
         "{{SENDGRID_API_KEY}}": config.get("sendgrid", {}).get("api_key", ""),
         # Sentry
         "{{SENTRY_DSN}}": config.get("sentry", {}).get("dsn", ""),
+        # Analytics
+        "{{GA_MEASUREMENT_ID}}": config.get("analytics", {}).get(
+            "ga_measurement_id", ""
+        ),
     }
 
 

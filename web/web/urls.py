@@ -9,7 +9,6 @@ from django.views.defaults import (
     permission_denied,
     server_error,
 )
-from spectacular import urls as spectacular_urls
 
 logger = structlog.get_logger(__name__)
 
