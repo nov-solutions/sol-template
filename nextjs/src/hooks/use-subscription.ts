@@ -1,6 +1,7 @@
 "use client";
 
 import { axiosClient } from "@/lib/axiosClient";
+import { extractApiError } from "@/lib/errors";
 import { useCallback, useEffect, useState } from "react";
 
 interface SubscriptionStatus {
@@ -57,9 +58,8 @@ export function useSubscription() {
       }
       return response.data;
     } catch (err: unknown) {
-      const error = err as { response?: { data?: { error?: string } } };
       throw new Error(
-        error.response?.data?.error || "Failed to create checkout session",
+        extractApiError(err, "Failed to create checkout session"),
       );
     }
   };
@@ -72,10 +72,7 @@ export function useSubscription() {
       }
       return response.data;
     } catch (err: unknown) {
-      const error = err as { response?: { data?: { error?: string } } };
-      throw new Error(
-        error.response?.data?.error || "Failed to open billing portal",
-      );
+      throw new Error(extractApiError(err, "Failed to open billing portal"));
     }
   };
 
@@ -85,10 +82,7 @@ export function useSubscription() {
       await fetchStatus();
       return response.data;
     } catch (err: unknown) {
-      const error = err as { response?: { data?: { error?: string } } };
-      throw new Error(
-        error.response?.data?.error || "Failed to cancel subscription",
-      );
+      throw new Error(extractApiError(err, "Failed to cancel subscription"));
     }
   };
 
@@ -98,9 +92,8 @@ export function useSubscription() {
       await fetchStatus();
       return response.data;
     } catch (err: unknown) {
-      const error = err as { response?: { data?: { error?: string } } };
       throw new Error(
-        error.response?.data?.error || "Failed to reactivate subscription",
+        extractApiError(err, "Failed to reactivate subscription"),
       );
     }
   };

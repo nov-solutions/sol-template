@@ -8,13 +8,15 @@ import { Separator } from "@/components/ui/separator";
 import { AuthCard } from "@/components/auth/auth-card";
 import { GoogleButton } from "@/components/auth/google-button";
 import { useAuth } from "@/hooks/use-auth";
+import { useAuthRedirect } from "@/hooks/use-auth-redirect";
 import { axiosClient } from "@/lib/axiosClient";
+import { extractApiError } from "@/lib/errors";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 export default function RegisterPage() {
-  const { error, clearError, refreshUser, user, loading } = useAuth();
+  const { error, clearError, refreshUser } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
@@ -24,12 +26,7 @@ export default function RegisterPage() {
   const router = useRouter();
   const plan = searchParams.get("plan");
 
-  // Redirect to dashboard if already authenticated
-  useEffect(() => {
-    if (user && !loading) {
-      router.replace("/dashboard");
-    }
-  }, [user, loading, router]);
+  useAuthRedirect();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -62,17 +59,17 @@ export default function RegisterPage() {
         router.push("/dashboard");
       }
     } catch (err: unknown) {
-      const errorData = (
+      const errData = (
         err as {
           response?: {
-            data?: { error?: string; email?: string[]; password?: string[] };
+            data?: { email?: string[]; password?: string[] };
           };
         }
       )?.response?.data;
       const errorMessage =
-        errorData?.error ||
-        errorData?.email?.[0] ||
-        errorData?.password?.[0] ||
+        extractApiError(err, "") ||
+        errData?.email?.[0] ||
+        errData?.password?.[0] ||
         "Registration failed. Please try again.";
       setLocalError(errorMessage);
     } finally {

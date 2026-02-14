@@ -1,6 +1,7 @@
 "use client";
 
 import { axiosClient } from "@/lib/axiosClient";
+import { extractApiError } from "@/lib/errors";
 import { useRouter } from "next/navigation";
 import {
   createContext,
@@ -81,9 +82,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setUser(response.data.user);
         router.push("/dashboard");
       } catch (err: unknown) {
-        const errorMessage =
-          (err as { response?: { data?: { error?: string } } })?.response?.data
-            ?.error || "Login failed. Please try again.";
+        const errorMessage = extractApiError(
+          err,
+          "Login failed. Please try again.",
+        );
         setError(errorMessage);
         throw new Error(errorMessage);
       } finally {

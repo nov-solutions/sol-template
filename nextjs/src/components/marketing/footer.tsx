@@ -2,21 +2,21 @@ import { CONTACT_EMAIL, SITE_NAME } from "@/constants";
 import { RiGithubLine, RiTwitterXLine } from "@remixicon/react";
 import Link from "next/link";
 
+const links = [
+  { name: "Features", href: "/#features" },
+  { name: "Pricing", href: "/pricing" },
+  { name: "Docs", href: "/docs" },
+  { name: "Contact", href: `mailto:${CONTACT_EMAIL}` },
+  { name: "Privacy", href: "/privacy" },
+  { name: "Terms", href: "/terms" },
+];
+
+const socials = [
+  { name: "GitHub", icon: RiGithubLine, href: "{{SOCIAL_GITHUB}}" },
+  { name: "Twitter", icon: RiTwitterXLine, href: "{{SOCIAL_TWITTER}}" },
+];
+
 export default function Footer() {
-  const links = [
-    { name: "Features", href: "/#features" },
-    { name: "Pricing", href: "/pricing" },
-    { name: "Docs", href: "/docs" },
-    { name: "Contact", href: `mailto:${CONTACT_EMAIL}` },
-    { name: "Privacy", href: "/privacy" },
-    { name: "Terms", href: "/terms" },
-  ];
-
-  const socials = [
-    { name: "GitHub", icon: RiGithubLine, href: "{{SOCIAL_GITHUB}}" },
-    { name: "Twitter", icon: RiTwitterXLine, href: "{{SOCIAL_TWITTER}}" },
-  ];
-
   return (
     <footer className="border-t">
       <div className="max-w-5xl px-6 py-6 mx-auto">

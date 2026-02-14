@@ -11,14 +11,12 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { LoadingButton } from "@/components/ui/loading-button";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/hooks/use-auth";
 import { axiosClient } from "@/lib/axiosClient";
-import {
-  RiCheckLine,
-  RiErrorWarningLine,
-  RiLoader4Line,
-} from "@remixicon/react";
+import { extractApiError } from "@/lib/errors";
+import { RiCheckLine, RiErrorWarningLine } from "@remixicon/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -69,10 +67,7 @@ export default function SettingsPage() {
       setNewPassword("");
       setNewPasswordConfirm("");
     } catch (err: unknown) {
-      const errorMessage =
-        (err as { response?: { data?: { error?: string } } })?.response?.data
-          ?.error || "Failed to change password.";
-      setPasswordError(errorMessage);
+      setPasswordError(extractApiError(err, "Failed to change password."));
     } finally {
       setPasswordLoading(false);
     }
@@ -89,10 +84,7 @@ export default function SettingsPage() {
       });
       router.push("/");
     } catch (err: unknown) {
-      const errorMessage =
-        (err as { response?: { data?: { error?: string } } })?.response?.data
-          ?.error || "Failed to delete account.";
-      setDeleteError(errorMessage);
+      setDeleteError(extractApiError(err, "Failed to delete account."));
     } finally {
       setDeleteLoading(false);
     }
@@ -203,13 +195,9 @@ export default function SettingsPage() {
               />
             </div>
 
-            <Button type="submit" disabled={passwordLoading}>
-              {passwordLoading ? (
-                <RiLoader4Line className="h-4 w-4 animate-spin" />
-              ) : (
-                "Change Password"
-              )}
-            </Button>
+            <LoadingButton type="submit" loading={passwordLoading}>
+              Change Password
+            </LoadingButton>
           </form>
         </CardContent>
       </Card>
@@ -280,17 +268,13 @@ export default function SettingsPage() {
                 >
                   Cancel
                 </Button>
-                <Button
+                <LoadingButton
                   type="submit"
                   variant="destructive"
-                  disabled={deleteLoading}
+                  loading={deleteLoading}
                 >
-                  {deleteLoading ? (
-                    <RiLoader4Line className="h-4 w-4 animate-spin" />
-                  ) : (
-                    "Permanently Delete Account"
-                  )}
-                </Button>
+                  Permanently Delete Account
+                </LoadingButton>
               </div>
             </form>
           )}

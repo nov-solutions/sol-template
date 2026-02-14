@@ -8,15 +8,15 @@ import { useAuth } from "@/hooks/use-auth";
 import { RiMenuLine, RiCloseLine } from "@remixicon/react";
 import Link from "next/link";
 
+const navLinks = [
+  { name: "Features", href: "/#features" },
+  { name: "Pricing", href: "/pricing" },
+  { name: "Docs", href: "/docs" },
+];
+
 export default function Nav() {
   const { user, loading } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  const navLinks = [
-    { name: "Features", href: "/#features" },
-    { name: "Pricing", href: "/pricing" },
-    { name: "Docs", href: "/docs" },
-  ];
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 border-b bg-background/80 backdrop-blur-lg">
