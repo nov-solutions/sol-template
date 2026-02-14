@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.contrib.auth import authenticate, get_user_model, login, logout
 from django.shortcuts import redirect
-from django.utils import timezone
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -237,9 +236,7 @@ class VerifyEmailView(APIView):
 
         # Mark email as verified
         user = token_obj.user
-        user.email_verified = True
-        user.email_verified_at = timezone.now()
-        user.save()
+        user.mark_email_verified()
 
         # Mark token as used
         token_obj.used = True

@@ -7,6 +7,10 @@ from django.utils import timezone
 User = get_user_model()
 
 
+def _get_base_url():
+    return settings.SITE_BASE_DOMAIN.rstrip("/")
+
+
 @shared_task
 def send_verification_email(user_id, ip_address=None):
     """Send email verification link to user."""
@@ -21,7 +25,7 @@ def send_verification_email(user_id, ip_address=None):
     token_obj = EmailVerificationToken.create_for_user(user)
 
     # Build verification URL
-    base_url = settings.SITE_BASE_DOMAIN.rstrip("/")
+    base_url = _get_base_url()
     verify_url = f"{base_url}/verify-email/{token_obj.token}"
 
     subject = "Verify your email address"
@@ -71,7 +75,7 @@ def send_password_reset_email(user_id):
     token_obj = PasswordResetToken.create_for_user(user)
 
     # Build reset URL
-    base_url = settings.SITE_BASE_DOMAIN.rstrip("/")
+    base_url = _get_base_url()
     reset_url = f"{base_url}/reset-password/{token_obj.token}"
 
     subject = "Reset your password"
