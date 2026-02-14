@@ -1,5 +1,5 @@
 import logging
-import os
+import sys
 
 import sentry_sdk
 import structlog
@@ -114,7 +114,7 @@ def configure_sentry():
                 "app_info",
                 {
                     "environment": SENTRY_ENVIRONMENT,
-                    "python_version": os.sys.version,
+                    "python_version": sys.version,
                 },
             )
 
