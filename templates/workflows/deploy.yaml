@@ -71,11 +71,7 @@ jobs:
 
       - name: SSH into server; rebuild Docker containers
         run: |
-          if [[ ${{ github.ref }} == 'refs/heads/master' ]]; then
-            ssh -i $(pwd)/deploy-key.pem ubuntu@${{ env.SERVER_IP }} 'cd app && docker compose -f docker-compose.yaml -f docker-compose.prod.yaml up --build -d'
-          else
-            ssh -i $(pwd)/deploy-key.pem ubuntu@${{ env.SERVER_IP }} 'cd app && docker compose -f docker-compose.yaml -f docker-compose.staging.yaml up --build -d'
-          fi
+          ssh -i $(pwd)/deploy-key.pem ubuntu@${{ env.SERVER_IP }} 'cd app && docker compose -f docker-compose.yaml -f docker-compose.prod.yaml up --build -d'
 
       - name: Remove SSH key
         run: |
