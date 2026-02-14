@@ -1,5 +1,6 @@
 import structlog
 
+from .models import Subscription
 from .utils import sync_subscription_from_stripe
 
 logger = structlog.get_logger(__name__)
@@ -81,8 +82,6 @@ def handle_subscription_deleted(event):
     subscription = event["data"]["object"]
 
     try:
-        from .models import Subscription
-
         # Update local subscription status
         sub = Subscription.objects.filter(
             stripe_subscription_id=subscription["id"]
@@ -107,18 +106,12 @@ def handle_subscription_trial_will_end(event):
 
     logger.info(f"Trial ending soon for subscription: {subscription['id']}")
 
-    # This is where you'd typically send an email to the user
-    # reminding them their trial is ending soon
-
     try:
-        from .models import Subscription
-
         sub = Subscription.objects.filter(
             stripe_subscription_id=subscription["id"]
         ).first()
 
         if sub:
-            # Add any custom logic here (e.g., send notification email)
             logger.info(
                 f"Trial ending notification for user: {sub.customer.user.email}"
             )
@@ -156,9 +149,6 @@ def handle_invoice_payment_failed(event):
         # Sync subscription to update status
         sync_subscription_from_stripe(invoice["subscription"])
 
-        # This is where you'd typically send a payment failed email
-        from .models import Subscription
-
         sub = Subscription.objects.filter(
             stripe_subscription_id=invoice["subscription"]
         ).first()
@@ -167,7 +157,6 @@ def handle_invoice_payment_failed(event):
             logger.warning(
                 f"Payment failed notification for user: {sub.customer.user.email}"
             )
-            # Add custom logic here (e.g., send payment failed email)
 
     except Exception as e:
         logger.error(f"Error handling payment failure: {str(e)}")

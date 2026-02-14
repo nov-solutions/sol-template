@@ -17,3 +17,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     created_at = models.DateTimeField(default=timezone.now)
     groups = None
     user_permissions = None
+
+    def mark_email_verified(self):
+        self.email_verified = True
+        self.email_verified_at = timezone.now()
+        self.save(update_fields=["email_verified", "email_verified_at"])

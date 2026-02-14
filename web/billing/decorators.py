@@ -1,10 +1,14 @@
 from functools import wraps
 
+import stripe
+import structlog
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import redirect
 
 from .utils import check_subscription_access
+
+logger = structlog.get_logger(__name__)
 
 
 def subscription_required(view_func=None, redirect_url=None, required_status=None):
@@ -50,3 +54,20 @@ def subscription_required(view_func=None, redirect_url=None, required_status=Non
     if view_func is not None:
         return decorator(view_func)
     return decorator
+
+
+def handle_stripe_errors(view_func):
+    @wraps(view_func)
+    def wrapper(request, *args, **kwargs):
+        try:
+            return view_func(request, *args, **kwargs)
+        except AttributeError:
+            return JsonResponse({"error": "No billing information found"}, status=404)
+        except stripe.error.StripeError as e:
+            logger.error(f"Stripe error: {str(e)}")
+            return JsonResponse({"error": str(e)}, status=400)
+        except Exception as e:
+            logger.error(f"Error in {view_func.__name__}: {str(e)}")
+            return JsonResponse({"error": "An error occurred"}, status=500)
+
+    return wrapper
