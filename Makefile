@@ -18,8 +18,8 @@ ssh:
 	ssh -i "app.pem" ubuntu@{{PRODUCTION_IP}}
 
 init-mig:
-	cd django && python manage.py makemigrations user
-	cd django && python manage.py makemigrations admin
+	docker exec -it {{PROJECT_SLUG}}-django python manage.py makemigrations user
+	docker exec -it {{PROJECT_SLUG}}-django python manage.py makemigrations admin
 	docker exec -it {{PROJECT_SLUG}}-django python manage.py migrate
 
 mk-mig:
@@ -34,5 +34,4 @@ deploy-cdk:
 
 venv:
 	python -m venv .venv
-	source .venv/bin/activate
-	pip install -r requirements.txt
+	.venv/bin/pip install -r web/requirements.txt
