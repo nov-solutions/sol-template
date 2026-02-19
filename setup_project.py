@@ -200,6 +200,13 @@ def interactive_wizard() -> dict:
         "api_key": prompt("SendGrid API Key", "", secret=True),
     }
 
+    # Google Analytics
+    prompt_section("Google Analytics (optional)")
+    print("  Get your Measurement ID at: https://analytics.google.com/")
+    config["google_analytics"] = {
+        "measurement_id": prompt("GA4 Measurement ID (e.g., G-XXXXXXXXXX)", ""),
+    }
+
     # Sentry
     prompt_section("Sentry Error Tracking (optional)")
     print("  Get your DSN at: https://sentry.io/settings/projects/")
