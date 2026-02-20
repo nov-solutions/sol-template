@@ -2,7 +2,6 @@ FROM nginx:1.27-alpine AS base
 
 COPY ./nginx/nginx.conf /etc/nginx/nginx.conf
 COPY .env /etc/nginx/.env
-
 COPY ./web/static /app/static
 
 FROM base AS dev

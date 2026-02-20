@@ -200,11 +200,24 @@ def interactive_wizard() -> dict:
         "api_key": prompt("SendGrid API Key", "", secret=True),
     }
 
+    # Google Analytics
+    prompt_section("Google Analytics (optional)")
+    print("  Get your Measurement ID at: https://analytics.google.com/")
+    config["google_analytics"] = {
+        "measurement_id": prompt("GA4 Measurement ID (e.g., G-XXXXXXXXXX)", ""),
+    }
+
     # Sentry
     prompt_section("Sentry Error Tracking (optional)")
     print("  Get your DSN at: https://sentry.io/settings/projects/")
     config["sentry"] = {
         "dsn": prompt("Sentry DSN", ""),
+    }
+
+    # Analytics
+    prompt_section("Analytics (optional)")
+    config["analytics"] = {
+        "ga_measurement_id": prompt("Google Analytics Measurement ID", ""),
     }
 
     print()
@@ -281,10 +294,18 @@ def build_replacements(config: dict) -> dict[str, str]:
         "{{GOOGLE_CLIENT_SECRET}}": config.get("google_oauth", {}).get(
             "client_secret", ""
         ),
+        # Google Analytics
+        "{{GA_MEASUREMENT_ID}}": config.get("google_analytics", {}).get(
+            "measurement_id", ""
+        ),
         # SendGrid
         "{{SENDGRID_API_KEY}}": config.get("sendgrid", {}).get("api_key", ""),
         # Sentry
         "{{SENTRY_DSN}}": config.get("sentry", {}).get("dsn", ""),
+        # Analytics
+        "{{GA_MEASUREMENT_ID}}": config.get("analytics", {}).get(
+            "ga_measurement_id", ""
+        ),
     }
 
 

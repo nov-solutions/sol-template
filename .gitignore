@@ -47,3 +47,7 @@ cdk/cdk.context.json
 celerybeat-schedule
 redbeat.ReadBeatScheduler
 refs
+objects
+hooks
+HEAD
+config

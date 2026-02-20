@@ -99,7 +99,7 @@ jobs:
           docker logs -f {{PROJECT_SLUG}}-django &
           LOG_PID=$!
 
-          trap "echo 'Stop'; kill $LOG_PID" EXIT
+          trap "echo 'Stop'; kill $LOG_PID 2>/dev/null || true" EXIT
 
           end=$((SECONDS+300))
           while [ $SECONDS -lt $end ]; do
@@ -109,7 +109,7 @@ jobs:
               echo "-------------------------------------------------"
               docker ps -a
               echo "-------------------------------------------------"
-              kill $LOG_PID
+              kill $LOG_PID 2>/dev/null || true
               exit 0
             fi
 
@@ -123,7 +123,7 @@ jobs:
           echo "-------------------------------------------------"
           docker ps -a
           echo "-------------------------------------------------"
-          kill $LOG_PID
+          kill $LOG_PID 2>/dev/null || true
           exit 1
 
       - name: Run Django tests
@@ -138,7 +138,7 @@ jobs:
           docker logs -f {{PROJECT_SLUG}}-nextjs &
           LOG_PID=$!
 
-          trap "echo 'Stop'; kill $LOG_PID" EXIT
+          trap "echo 'Stop'; kill $LOG_PID 2>/dev/null || true" EXIT
 
           end=$((SECONDS+300))
           while [ $SECONDS -lt $end ]; do
@@ -148,7 +148,7 @@ jobs:
               echo "-------------------------------------------------"
               docker ps -a
               echo "-------------------------------------------------"
-              kill $LOG_PID
+              kill $LOG_PID 2>/dev/null || true
               exit 0
             fi
 
@@ -162,7 +162,7 @@ jobs:
           echo "-------------------------------------------------"
           docker ps -a
           echo "-------------------------------------------------"
-          kill $LOG_PID
+          kill $LOG_PID 2>/dev/null || true
           exit 1
 
       - name: Bring down Docker containers
