@@ -1,11 +1,5 @@
-import uuid
-
 from django.conf import settings
 from django.core.mail import send_mail
-
-
-def generate_verification_code():
-    return str(uuid.uuid4())
 
 
 def send_verification_email(user):
