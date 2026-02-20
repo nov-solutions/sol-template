@@ -58,6 +58,10 @@
     "client_secret": "test-client-secret"
   },
 
+  "google_analytics": {
+    "measurement_id": "G-TEST123456"
+  },
+
   "sendgrid": {
     "api_key": "SG.test_api_key_placeholder"
   },
