@@ -1,7 +1,7 @@
 repos:
   # pre-commit hooks
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v6.0.0
     hooks:
       - id: check-merge-conflict
       - id: detect-aws-credentials
@@ -38,13 +38,13 @@ repos:
 
   # python linter and formatter
   - repo: https://github.com/psf/black
-    rev: 25.1.0
+    rev: 26.1.0
     hooks:
       - id: black
 
   # python dependency sorter
   - repo: https://github.com/pycqa/isort
-    rev: 5.13.2
+    rev: 8.0.0
     hooks:
       - id: isort
         name: isort (python)
@@ -52,7 +52,7 @@ repos:
 
   # python import and variable checker
   - repo: https://github.com/PyCQA/autoflake
-    rev: v2.3.1
+    rev: v2.3.2
     hooks:
       - id: autoflake
         args: [--remove-all-unused-imports, --remove-unused-variables, --in-place]
