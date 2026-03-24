@@ -1,50 +1,46 @@
-# Sol
+![TypeScript](https://img.shields.io/badge/typescript-5.x-blue)
+![Python](https://img.shields.io/badge/python-3.13-blue)
+![CI](https://github.com/nov-solutions/sol-template/actions/workflows/ci.yaml/badge.svg)
+![Docker](https://img.shields.io/badge/docker-compose-blue)
+![License](https://img.shields.io/badge/license-proprietary-gray)
 
-Sol is an all-in-one template that enables developers to create robust, reliable, and responsive web apps in minutes.
+# sol-template
 
-© [nov](https://github.com/nov-solutions)
+Template repository for scaffolding full stack web applications. Not deployed directly. `setup_project.py` replaces `{{VARIABLE}}` placeholders throughout the codebase with real values from `template.config.json` to generate a new project.
 
-## Getting Started
+## Quick Start
 
-### Local Development
+```bash
+cp template.config.json template.config.json  # fill in project values
+python setup_project.py                        # replace all template variables
+make dev                                       # start all containers with hot reload
+```
 
-0. Run `make dev` to build the project's Docker images and start the project's Docker containers
+## Project Setup
 
-1. Access the web app via `localhost`
+```bash
+python setup_project.py                # non-interactive (reads template.config.json)
+python setup_project.py --interactive  # interactive wizard
+python setup_project.py --clean        # remove template files after setup
+```
 
-## Architecture
+## Development
 
-### Cloud Infrastructure
+```bash
+make dev          # start dev containers (docker-compose.dev.yaml overlay)
+make test         # run Django tests inside container
+make drop-db      # stop containers, remove database volume
+make mk-mig       # create and apply migrations
+make deploy-cdk   # deploy infrastructure to AWS via CDK
+```
 
-**AWS**, a cloud computing services company, provides cloud services, such as application hosting, for the web app. The AWS CDK is used to provision most of the resources needed to run the web app in the cloud.
+## Stack
 
-### Continuous Integration and Continuous Deployment
-
-**GitHub Actions**, a CI/CD platform, automates the process of building, testing, and deploying the web app to the cloud. The `.github/workflows` directory contains the configuration files for the GitHub Actions workflows that run when code is pushed to the primary branch of the repository.
-
-### Virtualization and Containerization
-
-**Docker**, a bundle of PAAS products, enables the virtualization and containerization of the web app and standardizes the local development and production deployment environments.
-
-### Data Layer
-
-**PostgreSQL**, an open-source ORDBMS, handles persistent data storage.\
-Data is interacted with through Django's ORM in the application layer.
-
-### Application Layer
-
-**Python**, a general-purpose, object-oriented programming language, handles the backend logic of the web app.\
-**Django**, a Python web framework, expresses this logic and serves as the interface between the presentation and data layers via the Model-View-Template design pattern.\
-**Celery**, a Python task queue, handles asynchronous tasks in the web app. Celery is configured to use Redis as its message broker.
-
-### Presentation Layer
-
-**Typescript**, a superset of Javascript, the core programming language of the Internet, handles the frontend logic of the web app.\
-**React**, a Javascript and Typescript library, bundles this logic and provides a component-based framework for expressing it.\
-**Next.js**, a React web framework, enables server-side rendering of React components and serves as the interface between the presentation and application layers via file system-based routing.\
-**Tailwind CSS**, a utility-first, class-based CSS framework, simplifies the process of styling markup in the presentation layer.\
-**shadcn/ui**, a component library for Tailwind CSS, provides several pre-built, customizable UI components.
-
-### Web Server
-
-**Nginx**, an open-source web server, acts as a reverse proxy that routes both external and internal traffic to the appropriate layer of the web app.
+- **Frontend**: Next.js 16, React 19, TypeScript, Tailwind CSS, shadcn/ui
+- **Backend**: Django 5.1, Django REST Framework, Celery, Redis
+- **Database**: PostgreSQL 17
+- **Proxy**: Nginx with rate limiting
+- **Infra**: AWS CDK (EC2, EBS, Elastic IP), Docker Compose
+- **CI**: GitHub Actions (lint, template validation, docker build, integration tests)
+- **Auth**: Session based with Google OAuth via django-allauth
+- **Billing**: Stripe subscriptions with webhook sync
